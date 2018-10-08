@@ -1,98 +1,82 @@
-const CHARACTER_SCALE_FACTOR = 1 / 12;
+const WORLD_HEIGHT = 480;
+const WORLD_WIDTH = 720;
 
-// NOTE: these are all `keypress` codes, not `keydown` etc.
-const KEYBINDINGS = {
+const CHARACTER_WIDTH = 40;
+const CHARACTER_HEIGHT = CHARACTER_WIDTH;
 
-  wasd: {
-    UP: 119, // w
-    DOWN: 115, // s
-    LEFT: 97, // a
-    RIGHT: 100 // d
+// NOTE: these are all `keydown` codes
+const keyBindings = {
+  UP   : 87, // w
+  LEFT : 65, // a
+  DOWN : 83, // s
+  RIGHT: 68  // d
+};
+
+const xVelocity = CHARACTER_WIDTH;
+const yVelocity = CHARACTER_HEIGHT;
+
+const charXMax = WORLD_WIDTH - CHARACTER_WIDTH;
+const charYMax = WORLD_HEIGHT - CHARACTER_HEIGHT;
+
+const getWorld = dom => dom.getElementById('world');
+const getCharacter = dom => dom.getElementById('character');
+
+const initializeWorld = ({ dom, worldProps, characterProps }) => {
+  const World     = getWorld(dom);
+  const Character = getCharacter(dom);
+
+  World.setAttribute('height', worldProps.height);
+  World.setAttribute('width', worldProps.width);
+
+  Character.setAttribute('height', characterProps.height);
+  Character.setAttribute('width', characterProps.width);
+};
+
+
+const initProps = {
+  dom: document,
+  worldProps: {
+    height: WORLD_HEIGHT,
+    width : WORLD_WIDTH
   },
-
-  ijkl: {
-    UP: 105, // i
-    DOWN: 107, // k
-    LEFT: 106, // j
-    RIGHT: 108 // l
-  },
-
-  vim: {
-    UP: 107, // k
-    DOWN: 106, // j
-    LEFT: 104, // h
-    RIGHT: 108 // l
+  characterProps: {
+    height: CHARACTER_HEIGHT,
+    width: CHARACTER_WIDTH
   }
 };
 
-/* ___ */
+initializeWorld(initProps);
 
-const defaultKeyBindings = KEYBINDINGS.vim;
 
-let currentKeyBindings = defaultKeyBindings;
+document.addEventListener('keydown', ({ keyCode }) => {
+  const { UP, DOWN, LEFT, RIGHT } = keyBindings;
 
-const world = document.getElementById('game-world');
+  const Character = getCharacter(document);
 
-const getWorldHeight = () => world.getAttribute('height');
-const getWorldWidth = () => world.getAttribute('width');
+  const characterX = parseFloat(Character.getAttribute('x'));
+  const characterY = parseFloat(Character.getAttribute('y'));
 
-let worldHeight = getWorldHeight();
-let worldWidth = getWorldWidth();
-
-window.addEventListener('resize', () => {
-  worldHeight = getWorldHeight();
-  worldWidth = getWorldWidth();
-});
-
-let shortEdge = Math.min(worldWidth, worldHeight);
-
-document.getElementById('key-bindings-mode').addEventListener('change', ({ target: { value }}) => {
-  currentKeyBindings = KEYBINDINGS[value];
-});
-
-/* ___ */
-
-const guy = Object.create(Character).create({
-  domObject: document.getElementById('guy'),
-  size: shortEdge * CHARACTER_SCALE_FACTOR
-});
-
-document.addEventListener('keypress', ({ keyCode }) => {
-  const { UP, DOWN, LEFT, RIGHT } = currentKeyBindings;
+  const left  = characterX - xVelocity;
+  const right = characterX + xVelocity;
+  const up    = characterY - yVelocity;
+  const down  = characterY + yVelocity;
 
   switch (keyCode) {
 
-    // up
-    case UP:
-      const meTop = guy.y;
-      const newTop = meTop - guy.size;
-      if (newTop >= 0) {
-        guy.y = newTop;
-      }
-      break;
-
-    case DOWN:
-      const meBottom = guy.y + guy.size;
-      const newBottom = meBottom + guy.size;
-      if (newBottom <= worldHeight) {
-        guy.y = newBottom - guy.size;
-      }
-      break;
-
     case LEFT:
-      const meLeft = +guy.domObject.getAttribute('x');
-      const newLeft = meLeft - guy.size;
-      if (newLeft >= 0) {
-        guy.x = newLeft;
-      }
+      Character.setAttribute('x', Math.max(left, 0));
       break;
 
     case RIGHT:
-      const meRight = +guy.domObject.getAttribute('x') + guy.size;
-      const newRight = meRight + guy.size;
-      if (newRight <= worldWidth) {
-        guy.x = newRight - guy.size;
-      }
+      Character.setAttribute('x', Math.min(right, charXMax));
+      break;
+
+    case UP:
+      Character.setAttribute('y', Math.max(up, 0));
+      break;
+
+    case DOWN:
+      Character.setAttribute('y', Math.min(down, charYMax));
       break;
   }
 });

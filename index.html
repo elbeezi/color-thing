@@ -5,21 +5,25 @@
 </head>
 <body>
 
-  <div>
+  <!-- <div>
     <select id="key-bindings-mode">
-      <option value="vim" selected>vim</option>
-      <option value="wasd">WASD</option>
+      <option value="vim">vim</option>
+      <option value="arrowKeys">arrow keys</option>
+      <option value="wasd" selected>WASD</option>
       <option value="ijkl">IJKL</option>
     </select>
-  </div>
+  </div> -->
 
   <div>
-    <svg id="game-world" class="game-world" height="400" width="400" x=0 y=0>
-      <rect id="guy">
+    <svg id="world" class="world" height="480" width="480" x="0" y="0">
+      <rect id="character" width="40" height="40" x="0" y="0" />
+      <g id="snow"></g>
+      <g id="grass"></g>
+      <g id="sand"></g>
+      <g id="lava"></g>
     </svg>
   </div>
 
-  <script type="text/javascript" src="character.js"></script>
   <script type="text/javascript" src="main.js"></script>
 </body>
 </html>
