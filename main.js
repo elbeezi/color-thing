@@ -87,7 +87,6 @@ document.addEventListener('keydown', ({ keyCode }) => {
   const down  = characterY + yVelocity;
 
   switch (keyCode) {
-
     case LEFT:
       Character.setAttribute('x', Math.max(left, 0));
       break;
@@ -103,6 +102,9 @@ document.addEventListener('keydown', ({ keyCode }) => {
     case DOWN:
       Character.setAttribute('y', Math.min(down, charYMax));
       break;
+
+    default:
+      return;
   }
 
   Character = getCharacter(document);
