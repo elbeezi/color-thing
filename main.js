@@ -1,7 +1,7 @@
-const WORLD_HEIGHT = 480;
-const WORLD_WIDTH = 720;
+const WORLD_HEIGHT = 300;
+const WORLD_WIDTH = 300;
 
-const CHARACTER_WIDTH = 40;
+const CHARACTER_WIDTH = 100;
 const CHARACTER_HEIGHT = CHARACTER_WIDTH;
 
 // NOTE: these are all `keydown` codes
@@ -32,6 +32,31 @@ const initializeWorld = ({ dom, worldProps, characterProps }) => {
   Character.setAttribute('width', characterProps.width);
 };
 
+const getRGBObj = colorString => {
+  const colorsOnly = colorString.slice(4, colorString.length - 1);
+  const colorsArr = colorsOnly.split(', ');
+
+  return {
+    red: parseInt(colorsArr[0], 10),
+    green: parseInt(colorsArr[1], 10),
+    blue: parseInt(colorsArr[2], 10)
+  };
+};
+
+const stringifyRGB = ({ red, green, blue }) => {
+  return `rgb(${red}, ${green}, ${blue})`;
+};
+
+const incrementColor = (characterObj, colorString, scaleInterval=50) => {
+  characterObj[colorString] = Math.min(characterObj[colorString] + scaleInterval, 255);
+};
+
+const decrementColor = (characterObj, colorString, scaleInterval=50) => {
+  characterObj[colorString] = Math.max(characterObj[colorString] - scaleInterval, 0);
+};
+
+
+// Initialization
 
 const initProps = {
   dom: document,
@@ -51,10 +76,10 @@ initializeWorld(initProps);
 document.addEventListener('keydown', ({ keyCode }) => {
   const { UP, DOWN, LEFT, RIGHT } = keyBindings;
 
-  const Character = getCharacter(document);
+  let Character = getCharacter(document);
 
-  const characterX = parseFloat(Character.getAttribute('x'));
-  const characterY = parseFloat(Character.getAttribute('y'));
+  let characterX = parseFloat(Character.getAttribute('x'));
+  let characterY = parseFloat(Character.getAttribute('y'));
 
   const left  = characterX - xVelocity;
   const right = characterX + xVelocity;
@@ -79,4 +104,39 @@ document.addEventListener('keydown', ({ keyCode }) => {
       Character.setAttribute('y', Math.min(down, charYMax));
       break;
   }
+
+  Character = getCharacter(document);
+  characterX = parseFloat(Character.getAttribute('x'));
+  characterY = parseFloat(Character.getAttribute('y'));
+
+  let characterColorObj = getRGBObj(Character.getAttribute('fill'));
+
+  if (characterX === 0 && characterY === 0) {
+    incrementColor(characterColorObj, "blue");
+    decrementColor(characterColorObj, "red");
+    decrementColor(characterColorObj, "green");
+  }
+  else if (characterX === 0 && characterY === 200) {
+    incrementColor(characterColorObj, "red");
+    incrementColor(characterColorObj, "green");
+    decrementColor(characterColorObj, "blue");
+  }
+  else if (characterX === 200 && characterY === 0) {
+    incrementColor(characterColorObj, "green");
+    decrementColor(characterColorObj, "red");
+    decrementColor(characterColorObj, "blue");
+  }
+  else if (characterX === 200 && characterY === 200) {
+    incrementColor(characterColorObj, "red");
+    decrementColor(characterColorObj, "green");
+    decrementColor(characterColorObj, "blue");
+  }
+  else {
+    incrementColor(characterColorObj, "red", 20);
+    incrementColor(characterColorObj, "green", 20);
+    incrementColor(characterColorObj, "blue", 20);
+  }
+
+  const colorString = stringifyRGB(characterColorObj);
+  Character.setAttribute("fill", colorString);
 });
