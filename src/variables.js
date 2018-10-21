@@ -1,0 +1,86 @@
+
+export const WORLD_HEIGHT = 300;
+export const WORLD_WIDTH = 300;
+
+export const TILE_SIZE = 100;
+
+export const CHARACTER_WIDTH = TILE_SIZE;
+export const CHARACTER_HEIGHT = TILE_SIZE;
+
+const REGION_WIDTH = TILE_SIZE;
+const REGION_HEIGHT = TILE_SIZE;
+
+const colorMap = {
+  red  : 'rgb(255, 0, 0)',
+  green: 'rgb(0, 255, 0)',
+  blue : 'rgb(0, 0, 255)',
+  white: 'rgb(255, 255, 255)'
+};
+
+export const regions = [
+  {
+    x: 0,
+    /*
+    x0: 0,
+    x1: 199,
+    y0: 0,
+    y1: 199
+    */
+    y: 0,
+    color: 'blue',
+    fill: colorMap.blue,
+    id: 'water',
+    width: REGION_WIDTH,
+    height: REGION_HEIGHT
+  },
+  {
+    x: 0,
+    y: 200,
+    color: 'green',
+    fill: colorMap.green,
+    id: 'forest',
+    width: REGION_WIDTH,
+    height: REGION_HEIGHT
+  },
+  {
+    x: 200,
+    y: 0,
+    color: 'green',
+    fill: colorMap.green,
+    id: 'grass',
+    width: REGION_WIDTH,
+    height: REGION_HEIGHT
+  },
+  {
+    x: 200,
+    y: 200,
+    color: 'red',
+    fill: colorMap.red,
+    id: 'lava',
+    width: REGION_WIDTH,
+    height: REGION_HEIGHT
+  }
+];
+
+export const characterObj = {
+  id: 'character',
+  x: CHARACTER_WIDTH,
+  y: CHARACTER_HEIGHT,
+  stroke: 'purple',
+  'stroke-width': '2px',
+  fill: colorMap.white
+};
+
+// NOTE: these are all `keydown` codes
+export const keyBindings = {
+  UP   : 87, // w
+  LEFT : 65, // a
+  DOWN : 83, // s
+  RIGHT: 68  // d
+};
+
+export const xVelocity = CHARACTER_WIDTH;
+export const yVelocity = CHARACTER_HEIGHT;
+
+export const charXMax = WORLD_WIDTH - CHARACTER_WIDTH;
+export const charYMax = WORLD_HEIGHT - CHARACTER_HEIGHT;
