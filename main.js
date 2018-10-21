@@ -18,18 +18,18 @@ const yVelocity = CHARACTER_HEIGHT;
 const charXMax = WORLD_WIDTH - CHARACTER_WIDTH;
 const charYMax = WORLD_HEIGHT - CHARACTER_HEIGHT;
 
-const getWorld = dom => dom.getElementById('world');
-const getCharacter = dom => dom.getElementById('character');
+const findWorldInDOM = dom => dom.getElementById('world');
+const findCharacterInDOM = dom => dom.getElementById('character');
 
 const initializeWorld = ({ dom, worldProps, characterProps }) => {
-  const World     = getWorld(dom);
-  const Character = getCharacter(dom);
+  const World     = () => findWorldInDOM(dom);
+  const Character = () => findCharacterInDOM(dom);
 
-  World.setAttribute('height', worldProps.height);
-  World.setAttribute('width', worldProps.width);
+  World().setAttribute('height', worldProps.height);
+  World().setAttribute('width', worldProps.width);
 
-  Character.setAttribute('height', characterProps.height);
-  Character.setAttribute('width', characterProps.width);
+  Character().setAttribute('height', characterProps.height);
+  Character().setAttribute('width', characterProps.width);
 };
 
 const getRGBObj = colorString => {
@@ -76,10 +76,10 @@ initializeWorld(initProps);
 document.addEventListener('keydown', ({ keyCode }) => {
   const { UP, DOWN, LEFT, RIGHT } = keyBindings;
 
-  let Character = getCharacter(document);
+  const Character = () => findCharacterInDOM(document);
 
-  let characterX = parseFloat(Character.getAttribute('x'));
-  let characterY = parseFloat(Character.getAttribute('y'));
+  const characterX = parseFloat(Character().getAttribute('x'));
+  const characterY = parseFloat(Character().getAttribute('y'));
 
   const left  = characterX - xVelocity;
   const right = characterX + xVelocity;
@@ -88,47 +88,51 @@ document.addEventListener('keydown', ({ keyCode }) => {
 
   switch (keyCode) {
     case LEFT:
-      Character.setAttribute('x', Math.max(left, 0));
+      Character().setAttribute('x', Math.max(left, 0));
       break;
 
     case RIGHT:
-      Character.setAttribute('x', Math.min(right, charXMax));
+      Character().setAttribute('x', Math.min(right, charXMax));
       break;
 
     case UP:
-      Character.setAttribute('y', Math.max(up, 0));
+      Character().setAttribute('y', Math.max(up, 0));
       break;
 
     case DOWN:
-      Character.setAttribute('y', Math.min(down, charYMax));
+      Character().setAttribute('y', Math.min(down, charYMax));
       break;
 
     default:
       return;
   }
 
-  Character = getCharacter(document);
-  characterX = parseFloat(Character.getAttribute('x'));
-  characterY = parseFloat(Character.getAttribute('y'));
+  const newCharacterX = parseFloat(Character().getAttribute('x'));
+  const newCharacterY = parseFloat(Character().getAttribute('y'));
 
-  let characterColorObj = getRGBObj(Character.getAttribute('fill'));
+  if (characterX === newCharacterX && characterY === newCharacterY) {
+    // Character didn't move, so don't do anything.
+    return;
+  }
 
-  if (characterX === 0 && characterY === 0) {
+  let characterColorObj = getRGBObj(Character().getAttribute('fill'));
+
+  if (newCharacterX === 0 && newCharacterY === 0) {
     incrementColor(characterColorObj, "blue");
     decrementColor(characterColorObj, "red");
     decrementColor(characterColorObj, "green");
   }
-  else if (characterX === 0 && characterY === 200) {
+  else if (newCharacterX === 0 && newCharacterY === 200) {
     incrementColor(characterColorObj, "red");
     incrementColor(characterColorObj, "green");
     decrementColor(characterColorObj, "blue");
   }
-  else if (characterX === 200 && characterY === 0) {
+  else if (newCharacterX === 200 && newCharacterY === 0) {
     incrementColor(characterColorObj, "green");
     decrementColor(characterColorObj, "red");
     decrementColor(characterColorObj, "blue");
   }
-  else if (characterX === 200 && characterY === 200) {
+  else if (newCharacterX === 200 && newCharacterY === 200) {
     incrementColor(characterColorObj, "red");
     decrementColor(characterColorObj, "green");
     decrementColor(characterColorObj, "blue");
@@ -140,5 +144,6 @@ document.addEventListener('keydown', ({ keyCode }) => {
   }
 
   const colorString = stringifyRGB(characterColorObj);
-  Character.setAttribute("fill", colorString);
+  console.log(colorString);
+  Character().setAttribute("fill", colorString);
 });
