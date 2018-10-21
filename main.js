@@ -1,8 +1,36 @@
 const WORLD_HEIGHT = 300;
 const WORLD_WIDTH = 300;
 
-const CHARACTER_WIDTH = 100;
-const CHARACTER_HEIGHT = CHARACTER_WIDTH;
+const TILE_SIZE = 100;
+
+const REGION_WIDTH = TILE_SIZE;
+const REGION_HEIGHT = TILE_SIZE;
+
+const CHARACTER_WIDTH = TILE_SIZE;
+const CHARACTER_HEIGHT = TILE_SIZE;
+
+const colorMap = {
+  red: 'rgb(255, 0, 0)',
+  green: 'rgb(0, 255, 0)',
+  blue: 'rgb(0, 0, 255)',
+  white: 'rgb(255, 255, 255)'
+};
+
+const regions = [
+  { x: 0, y: 0, color: 'blue', fill: colorMap['blue'], id: 'water', width: REGION_WIDTH, height: REGION_HEIGHT },
+  { x: 0, y: 200, color: 'green', fill: colorMap['green'], id: 'forest', width: REGION_WIDTH, height: REGION_HEIGHT },
+  { x: 200, y: 0, color: 'green', fill: colorMap['green'], id: 'grass', width: REGION_WIDTH, height: REGION_HEIGHT },
+  { x: 200, y: 200, color: 'red', fill: colorMap['red'], id: 'lava', width: REGION_WIDTH, height: REGION_HEIGHT }
+];
+
+const characterObj = {
+  id: 'character',
+  x: CHARACTER_WIDTH,
+  y: CHARACTER_HEIGHT,
+  stroke: 'purple',
+  'stroke-width': '5px',
+  fill: 'rgb(255, 255, 255)'
+};
 
 // NOTE: these are all `keydown` codes
 const keyBindings = {
@@ -28,6 +56,21 @@ const initializeWorld = ({ dom, worldProps, characterProps }) => {
   World().setAttribute('height', worldProps.height);
   World().setAttribute('width', worldProps.width);
 
+  regions.map(region => {
+    // <rect id={region.id} width={REGION_WIDTH} height={REGION_HEIGHT} x={region.x} y={region.y} fill={colorMap[region.fill]} />
+    const Region = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    Object.keys(region).map(regionKey => {
+      Region.setAttribute(regionKey, region[regionKey]);
+    });
+    World().appendChild(Region);
+  });
+
+  const CharacterRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  Object.keys(characterObj).map(characterKey => {
+    CharacterRect.setAttribute(characterKey, characterObj[characterKey]);
+  });
+  World().appendChild(CharacterRect);
+
   Character().setAttribute('height', characterProps.height);
   Character().setAttribute('width', characterProps.width);
 };
@@ -47,13 +90,40 @@ const stringifyRGB = ({ red, green, blue }) => {
   return `rgb(${red}, ${green}, ${blue})`;
 };
 
-const incrementColor = (characterObj, colorString, scaleInterval=50) => {
-  characterObj[colorString] = Math.min(characterObj[colorString] + scaleInterval, 255);
+const incrementColor = (characterColorObj, colorString, scaleInterval=50) => {
+  characterColorObj[colorString] = Math.min(characterColorObj[colorString] + scaleInterval, 255);
 };
 
-const decrementColor = (characterObj, colorString, scaleInterval=50) => {
-  characterObj[colorString] = Math.max(characterObj[colorString] - scaleInterval, 0);
+const decrementColor = (characterColorObj, colorString, scaleInterval=50) => {
+  characterColorObj[colorString] = Math.max(characterColorObj[colorString] - scaleInterval, 0);
 };
+
+const moveTowardsColor = (characterColorObj, regionColorString) => {
+  switch (regionColorString) {
+    case "red":
+      incrementColor(characterColorObj, "red");
+      decrementColor(characterColorObj, "green");
+      decrementColor(characterColorObj, "blue");
+      break;
+    case "green":
+      decrementColor(characterColorObj, "red");
+      incrementColor(characterColorObj, "green");
+      decrementColor(characterColorObj, "blue");
+      break;
+    case "blue":
+      decrementColor(characterColorObj, "red");
+      decrementColor(characterColorObj, "green");
+      incrementColor(characterColorObj, "blue");
+      break;
+    case "white":
+      incrementColor(characterColorObj, "red", 25);
+      incrementColor(characterColorObj, "green", 25);
+      incrementColor(characterColorObj, "blue", 25);
+      break;
+  }
+};
+
+
 
 
 // Initialization
@@ -117,33 +187,17 @@ document.addEventListener('keydown', ({ keyCode }) => {
 
   let characterColorObj = getRGBObj(Character().getAttribute('fill'));
 
-  if (newCharacterX === 0 && newCharacterY === 0) {
-    incrementColor(characterColorObj, "blue");
-    decrementColor(characterColorObj, "red");
-    decrementColor(characterColorObj, "green");
-  }
-  else if (newCharacterX === 0 && newCharacterY === 200) {
-    incrementColor(characterColorObj, "red");
-    incrementColor(characterColorObj, "green");
-    decrementColor(characterColorObj, "blue");
-  }
-  else if (newCharacterX === 200 && newCharacterY === 0) {
-    incrementColor(characterColorObj, "green");
-    decrementColor(characterColorObj, "red");
-    decrementColor(characterColorObj, "blue");
-  }
-  else if (newCharacterX === 200 && newCharacterY === 200) {
-    incrementColor(characterColorObj, "red");
-    decrementColor(characterColorObj, "green");
-    decrementColor(characterColorObj, "blue");
-  }
-  else {
-    incrementColor(characterColorObj, "red", 20);
-    incrementColor(characterColorObj, "green", 20);
-    incrementColor(characterColorObj, "blue", 20);
+  const matchingRegion = regions.find(region => {
+    return region.x === newCharacterX && region.y === newCharacterY;
+  });
+
+  if (matchingRegion) {
+    moveTowardsColor(characterColorObj, matchingRegion.color);
+  } else {
+    moveTowardsColor(characterColorObj, 'white');
   }
 
   const colorString = stringifyRGB(characterColorObj);
-  console.log(colorString);
+  console.log(colorString); 
   Character().setAttribute("fill", colorString);
 });
