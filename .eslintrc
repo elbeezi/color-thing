@@ -17,14 +17,11 @@
         "SwitchCase": 1
       }
     ],
-    "linebreak-style": [
-      "warn",
-      "unix"
-    ],
     "object-curly-spacing": [
       "warn",
       "always"
     ],
+    "no-console": "off",
     "prefer-const": "warn",
     "quotes": [
       "warn",

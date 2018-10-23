@@ -1,49 +1,45 @@
 import {
   findCharacterInDOM,
-  findWorldInDOM,
   getRGBObj,
   moveTowardsColor,
   stringifyRGB
 } from './utils.js';
 import {
-  CHARACTER_WIDTH,
-  CHARACTER_HEIGHT,
-  WORLD_HEIGHT,
-  WORLD_WIDTH,
-  characterObj,
+  characterProps,
   charXMax,
   charYMax,
   keyBindings,
-  regions,
+  regionsProps,
+  worldProps,
   xVelocity,
   yVelocity
 } from './variables.js';
 
+import './app.css';
 
 const initializeWorld = ({ dom, worldProps, characterProps }) => {
-  const World     = () => findWorldInDOM(dom);
-  const Character = () => findCharacterInDOM(dom);
+  const WrappingDiv = dom.createElement('div');
+  dom.body.appendChild(WrappingDiv);
 
-  World().setAttribute('height', worldProps.height);
-  World().setAttribute('width', worldProps.width);
+  const World = dom.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  Object.keys(worldProps).map(propKey => {
+    World.setAttribute(propKey, worldProps[propKey]);
+  });
+  WrappingDiv.appendChild(World);
 
-  regions.map(region => {
-    // <rect id={region.id} width={REGION_WIDTH} height={REGION_HEIGHT} x={region.x} y={region.y} fill={colorMap[region.fill]} />
-    const Region = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    Object.keys(region).map(regionKey => {
-      Region.setAttribute(regionKey, region[regionKey]);
+  regionsProps.map(regionProps => {
+    const Region = dom.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    Object.keys(regionProps).map(propKey => {
+      Region.setAttribute(propKey, regionProps[propKey]);
     });
-    World().appendChild(Region);
+    World.appendChild(Region);
   });
 
-  const CharacterRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-  Object.keys(characterObj).map(characterKey => {
-    CharacterRect.setAttribute(characterKey, characterObj[characterKey]);
+  const Character = dom.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  Object.keys(characterProps).map(propKey => {
+    Character.setAttribute(propKey, characterProps[propKey]);
   });
-  World().appendChild(CharacterRect);
-
-  Character().setAttribute('height', characterProps.height);
-  Character().setAttribute('width', characterProps.width);
+  World.appendChild(Character);
 };
 
 
@@ -51,14 +47,8 @@ const initializeWorld = ({ dom, worldProps, characterProps }) => {
 
 const initProps = {
   dom: document,
-  worldProps: {
-    height: WORLD_HEIGHT,
-    width : WORLD_WIDTH
-  },
-  characterProps: {
-    height: CHARACTER_HEIGHT,
-    width: CHARACTER_WIDTH
-  }
+  worldProps,
+  characterProps
 };
 
 initializeWorld(initProps);
@@ -108,7 +98,7 @@ document.addEventListener('keydown', ({ keyCode }) => {
 
   const characterColorObj = getRGBObj(Character().getAttribute('fill'));
 
-  const matchingRegion = regions.find(region => {
+  const matchingRegion = regionsProps.find(region => {
     return region.x === newCharacterX && region.y === newCharacterY;
   });
 
