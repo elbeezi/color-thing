@@ -1,6 +1,6 @@
 ## Install
 ### Download prerequisites
-[Yarn](https://yarnpkg.com/en/docs/install)
+- [Yarn](https://yarnpkg.com/en/docs/install)
 
 ### Download source & install dependencies
 1. Clone repository
