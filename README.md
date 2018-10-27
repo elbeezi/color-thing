@@ -7,9 +7,13 @@
 2. `cd` into source directory
 3. `yarn`
 
-## Play
+## Play & Contribute
+1. `yarn start --open`
+* (or `yarn start` and open `localhost:8080` in a browser)
+
+## Build & Play
 1. `yarn build`
 2. Open `/dist/index.html` in a browser
 
-## Contribute
-1. `yarn start`
+## Test
+1. `yarn test`

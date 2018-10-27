@@ -3,7 +3,7 @@ import {
   getRGBObj,
   moveTowardsColor,
   stringifyRGB
-} from './utils.js';
+} from './utils/utils';
 import {
   characterProps,
   charXMax,
@@ -13,7 +13,7 @@ import {
   worldProps,
   xVelocity,
   yVelocity
-} from './variables.js';
+} from './variables';
 
 import './app.css';
 
