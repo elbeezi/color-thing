@@ -23,6 +23,8 @@
       "always"
     ],
     "no-console": "off",
+    "no-debugger": "warn",
+    "no-unused-vars": "warn",
     "prefer-const": "warn",
     "quotes": [
       "warn",
