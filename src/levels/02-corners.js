@@ -1,4 +1,4 @@
-const level2 = {
+const corners = {
   worldWidth        : 300,
   worldHeight       : 300,
 
@@ -13,4 +13,4 @@ const level2 = {
   ]
 };
 
-export default level2;
+export default corners;

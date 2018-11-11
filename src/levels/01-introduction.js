@@ -1,4 +1,4 @@
-const level1 = {
+const introduction = {
   worldWidth        : 500,
   worldHeight       : 100,
 
@@ -10,5 +10,5 @@ const level1 = {
   ]
 };
 
-export default level1;
+export default introduction;
 

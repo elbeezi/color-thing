@@ -17,3 +17,8 @@
 
 ## Test
 1. `yarn test`
+
+## Creating Levels
+1. Create a new file in `/src/levels/` (or copy the example file in that dir)
+2. Replace the level `import` statement in `app.js` with your new filename
+3. GLHF

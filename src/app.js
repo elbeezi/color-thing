@@ -14,29 +14,29 @@ import {
   CHARACTER_HEIGHT,
   CHARACTER_WIDTH
 } from './variables/commonVariables';
-import levelProps from './variables/levels/level1';
+import level from './levels/01-introduction';
 
 import './app.css';
 
-const charXMax = levelProps.worldWidth - CHARACTER_WIDTH;
-const charYMax = levelProps.worldHeight - CHARACTER_HEIGHT;
+const charXMax = level.worldWidth - CHARACTER_WIDTH;
+const charYMax = level.worldHeight - CHARACTER_HEIGHT;
 
-const initialRegionsProps = levelProps.regions.map(regionCoords => {
+const initialRegionsProps = level.regions.map(regionCoords => {
   return generateRegion(...regionCoords);
 });
 
 const initialWorldProps = {
   x     : 0,
   y     : 0,
-  width : levelProps.worldWidth,
-  height: levelProps.worldHeight
+  width : level.worldWidth,
+  height: level.worldHeight
 };
 
 const initialCharacterProps = {
   height        : CHARACTER_HEIGHT,
   width         : CHARACTER_WIDTH,
-  x             : levelProps.characterStartingX,
-  y             : levelProps.characterStartingY,
+  x             : level.characterStartingX,
+  y             : level.characterStartingY,
   stroke        : 'purple',
   'stroke-width': '2px',
   fill          : mapColor('white')
