@@ -1,6 +1,3 @@
-export const findWorldInDOM = dom => dom.getElementById('world');
-export const findCharacterInDOM = dom => dom.getElementById('character');
-
 export const getRGBObj = colorString => {
   const colorsOnly = colorString.slice(4, colorString.length - 1);
   const colorsArr = colorsOnly.split(', ');

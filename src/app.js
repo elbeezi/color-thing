@@ -2,7 +2,6 @@ import {
   generateRegion
 } from './utils/generate-region/generateRegion';
 import {
-  findCharacterInDOM,
   getRGBObj,
   moveTowardsColor,
   stringifyRGB
@@ -22,21 +21,18 @@ import './app.css';
 const charXMax = levelProps.worldWidth - CHARACTER_WIDTH;
 const charYMax = levelProps.worldHeight - CHARACTER_HEIGHT;
 
-const regionsProps = levelProps.regions.map(regionCoords => {
+const initialRegionsProps = levelProps.regions.map(regionCoords => {
   return generateRegion(...regionCoords);
 });
 
-const worldProps = {
-  id    : 'world',
-  class : 'world',
+const initialWorldProps = {
   x     : 0,
   y     : 0,
   width : levelProps.worldWidth,
   height: levelProps.worldHeight
 };
 
-const characterProps = {
-  id            : 'character',
+const initialCharacterProps = {
   height        : CHARACTER_HEIGHT,
   width         : CHARACTER_WIDTH,
   x             : levelProps.characterStartingX,
@@ -46,93 +42,117 @@ const characterProps = {
   fill          : mapColor('white')
 };
 
-const initializeWorld = ({ dom, worldProps, characterProps }) => {
-  const WrappingDiv = dom.createElement('div');
-  dom.body.appendChild(WrappingDiv);
+const render = ({ world, regions, character }) => {
+  const WrappingDivOld = document.getElementsByClassName('WrappingDiv')[0];
+  WrappingDivOld && document.body.removeChild(WrappingDivOld);
 
-  const World = dom.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  Object.keys(worldProps).map(propKey => {
-    World.setAttribute(propKey, worldProps[propKey]);
+  const WrappingDiv = document.createElement('div');
+  WrappingDiv.setAttribute('class', 'WrappingDiv');
+  document.body.appendChild(WrappingDiv);
+
+  const World = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  Object.keys(world).map(propKey => {
+    World.setAttribute('class', 'World');
+    World.setAttribute(propKey, world[propKey]);
   });
   WrappingDiv.appendChild(World);
 
-  regionsProps.map(regionProps => {
-    const Region = dom.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  regions.map((regionProps, i) => {
+    const Region = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    Region.setAttribute('class', `Region${i}`);
     Object.keys(regionProps).map(propKey => {
       Region.setAttribute(propKey, regionProps[propKey]);
     });
     World.appendChild(Region);
   });
 
-  const Character = dom.createElementNS('http://www.w3.org/2000/svg', 'rect');
-  Object.keys(characterProps).map(propKey => {
-    Character.setAttribute(propKey, characterProps[propKey]);
+  const Character = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  Character.setAttribute('class', 'Character');
+  Object.keys(character).map(propKey => {
+    Character.setAttribute(propKey, character[propKey]);
   });
   World.appendChild(Character);
 };
 
 
 // Initialization
-const initProps = {
-  dom: document,
-  worldProps,
-  characterProps
+
+const state = {
+  character: initialCharacterProps,
+  regions  : initialRegionsProps,
+  world    : initialWorldProps
 };
 
-initializeWorld(initProps);
+const initializeWorld = () => render(state);
+
+// via https://developer.mozilla.org/en-US/docs/Web/Events/documentContentLoaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeWorld);
+} else {  // `documentContentLoaded` already fired
+  initializeWorld();
+}
 
 
 document.addEventListener('keydown', ({ keyCode }) => {
   const { UP, DOWN, LEFT, RIGHT } = keyBindings;
 
-  const Character = () => findCharacterInDOM(document);
-
-  const characterX = parseFloat(Character().getAttribute('x'));
-  const characterY = parseFloat(Character().getAttribute('y'));
+  const characterX    = state.character.x;
+  const characterY    = state.character.y;
+  const characterFill = state.character.fill;
 
   const left  = characterX - xVelocity;
   const right = characterX + xVelocity;
   const up    = characterY - yVelocity;
   const down  = characterY + yVelocity;
 
+  const characterPropsToSet = {
+    x   : characterX,
+    y   : characterY,
+    fill: characterFill
+  };
+
   switch (keyCode) {
     case LEFT:
-      Character().setAttribute('x', Math.max(left, 0));
+      characterPropsToSet.x = Math.max(left, 0);
       break;
 
     case RIGHT:
-      Character().setAttribute('x', Math.min(right, charXMax));
+      characterPropsToSet.x = Math.min(right, charXMax);
       break;
 
     case UP:
-      Character().setAttribute('y', Math.max(up, 0));
+      characterPropsToSet.y = Math.max(up, 0);
       break;
 
     case DOWN:
-      Character().setAttribute('y', Math.min(down, charYMax));
+      characterPropsToSet.y = Math.min(down, charYMax);
       break;
 
     default:
+      // A non-movement key was pressed, so don't do anything.
       return;
   }
 
-  const newCharacterX = parseFloat(Character().getAttribute('x'));
-  const newCharacterY = parseFloat(Character().getAttribute('y'));
-
-  if (characterX === newCharacterX && characterY === newCharacterY) {
+  if (characterX === characterPropsToSet.x && characterY === characterPropsToSet.y) {
     // Character didn't move, so don't do anything.
     return;
   }
 
-  const matchingRegion = regionsProps.find(region => {
-    return region.x === newCharacterX && region.y === newCharacterY;
+  const matchingRegion = state.regions.find(region => {
+    return region.x === characterPropsToSet.x && region.y === characterPropsToSet.y;
   });
 
   const colorToMoveTowards = matchingRegion ? matchingRegion.color : 'white';
 
-  const characterColorObj = getRGBObj(Character().getAttribute('fill'));
+  const characterColorObj = getRGBObj(characterFill);
   const newColorObj = moveTowardsColor(characterColorObj, colorToMoveTowards);
 
-  const colorString = stringifyRGB(newColorObj);
-  Character().setAttribute('fill', colorString);
+  characterPropsToSet.fill = stringifyRGB(newColorObj);
+
+  state.character = {
+    ...state.character,
+    ...characterPropsToSet
+  };
+
+  render(state);
 });
