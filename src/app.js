@@ -1,3 +1,4 @@
+import generateRegion from './utils/generate-region/generateRegion';
 import {
   findCharacterInDOM,
   getRGBObj,
@@ -9,13 +10,19 @@ import {
   charXMax,
   charYMax,
   keyBindings,
-  regionsProps,
   worldProps,
   xVelocity,
   yVelocity
 } from './variables';
 
 import './app.css';
+
+const regionsProps = [
+  generateRegion(0, 0, 'blue'),
+  generateRegion(200, 0, 'green'),
+  generateRegion(0, 200, 'green'),
+  generateRegion(200, 200, 'red')
+];
 
 const initializeWorld = ({ dom, worldProps, characterProps }) => {
   const WrappingDiv = dom.createElement('div');
@@ -44,7 +51,6 @@ const initializeWorld = ({ dom, worldProps, characterProps }) => {
 
 
 // Initialization
-
 const initProps = {
   dom: document,
   worldProps,
@@ -96,14 +102,13 @@ document.addEventListener('keydown', ({ keyCode }) => {
     return;
   }
 
-  const characterColorObj = getRGBObj(Character().getAttribute('fill'));
-
   const matchingRegion = regionsProps.find(region => {
     return region.x === newCharacterX && region.y === newCharacterY;
   });
 
   const colorToMoveTowards = matchingRegion ? matchingRegion.color : 'white';
 
+  const characterColorObj = getRGBObj(Character().getAttribute('fill'));
   const newColorObj = moveTowardsColor(characterColorObj, colorToMoveTowards);
 
   const colorString = stringifyRGB(newColorObj);

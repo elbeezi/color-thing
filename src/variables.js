@@ -6,11 +6,8 @@ const TILE_SIZE = 100;
 const CHARACTER_HEIGHT = TILE_SIZE;
 const CHARACTER_WIDTH  = TILE_SIZE;
 
-const REGION_HEIGHT = TILE_SIZE;
-const REGION_WIDTH  = TILE_SIZE;
 
-
-const colorMap = {
+export const colorMap = {
   red  : 'rgb(255, 0, 0)',
   green: 'rgb(0, 255, 0)',
   blue : 'rgb(0, 0, 255)',
@@ -36,51 +33,6 @@ export const characterProps = {
   'stroke-width': '2px',
   fill          : colorMap.white
 };
-
-export const regionsProps = [
-  {
-    /*
-      x0: 0,
-      x1: 199,
-      y0: 0,
-      y1: 199,
-    */
-    x     : 0,
-    y     : 0,
-    color : 'blue',
-    fill  : colorMap.blue,
-    id    : 'water',
-    width : REGION_WIDTH,
-    height: REGION_HEIGHT
-  },
-  {
-    x     : 0,
-    y     : 200,
-    color : 'green',
-    fill  : colorMap.green,
-    id    : 'forest',
-    width : REGION_WIDTH,
-    height: REGION_HEIGHT
-  },
-  {
-    x     : 200,
-    y     : 0,
-    color : 'green',
-    fill  : colorMap.green,
-    id    : 'grass',
-    width : REGION_WIDTH,
-    height: REGION_HEIGHT
-  },
-  {
-    x     : 200,
-    y     : 200,
-    color : 'red',
-    fill  : colorMap.red,
-    id    : 'lava',
-    width : REGION_WIDTH,
-    height: REGION_HEIGHT
-  }
-];
 
 // NOTE: these are all `keydown` codes
 export const keyBindings = {
