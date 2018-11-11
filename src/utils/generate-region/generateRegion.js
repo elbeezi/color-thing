@@ -1,16 +1,19 @@
 import {
   getRandomColor,
-  colorMap
+  mapColor
 } from '../color-mapper/colorMapper';
 
-const generateRegion = (xValue, yValue, colorString) => {
+const REGION_HEIGHT = 100;
+const REGION_WIDTH = 100;
+
+export const generateRegion = (x, y, colorString) => {
   return {
-    x     : xValue,
-    y     : yValue,
-    color : colorString,
-    fill  : colorMap[colorString],
-    width : 100,
-    height: 100
+    x,
+    y,
+    color: colorString,
+    fill  : mapColor(colorString),
+    height: REGION_HEIGHT,
+    width : REGION_WIDTH
   };
 };
 

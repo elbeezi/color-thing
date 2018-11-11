@@ -1,5 +1,5 @@
 import {
-  generateRegionWithRandomColor
+  generateRegion
 } from './utils/generate-region/generateRegion';
 import {
   findCharacterInDOM,
@@ -7,28 +7,44 @@ import {
   moveTowardsColor,
   stringifyRGB
 } from './utils/utils';
+import { mapColor } from './utils/color-mapper/colorMapper';
 import {
-  characterProps,
-  charXMax,
-  charYMax,
   keyBindings,
-  worldProps,
   xVelocity,
-  yVelocity
-} from './variables';
+  yVelocity,
+  CHARACTER_HEIGHT,
+  CHARACTER_WIDTH
+} from './variables/commonVariables';
+import levelProps from './variables/levels/level1';
 
 import './app.css';
 
-const regions = [
-  [0, 0],
-  [200, 0],
-  [0, 200],
-  [200, 200]
-];
+const charXMax = levelProps.worldWidth - CHARACTER_WIDTH;
+const charYMax = levelProps.worldHeight - CHARACTER_HEIGHT;
 
-const regionsProps = regions.map(regionCoords => {
-  return generateRegionWithRandomColor(...regionCoords);
+const regionsProps = levelProps.regions.map(regionCoords => {
+  return generateRegion(...regionCoords);
 });
+
+const worldProps = {
+  id    : 'world',
+  class : 'world',
+  x     : 0,
+  y     : 0,
+  width : levelProps.worldWidth,
+  height: levelProps.worldHeight
+};
+
+const characterProps = {
+  id            : 'character',
+  height        : CHARACTER_HEIGHT,
+  width         : CHARACTER_WIDTH,
+  x             : levelProps.characterStartingX,
+  y             : levelProps.characterStartingY,
+  stroke        : 'purple',
+  'stroke-width': '2px',
+  fill          : mapColor('white')
+};
 
 const initializeWorld = ({ dom, worldProps, characterProps }) => {
   const WrappingDiv = dom.createElement('div');
@@ -118,6 +134,5 @@ document.addEventListener('keydown', ({ keyCode }) => {
   const newColorObj = moveTowardsColor(characterColorObj, colorToMoveTowards);
 
   const colorString = stringifyRGB(newColorObj);
-  console.log(colorString);
   Character().setAttribute('fill', colorString);
 });
