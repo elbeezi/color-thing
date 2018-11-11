@@ -1,3 +1,5 @@
+import { colorMap } from './utils/color-mapper/colorMapper';
+
 const WORLD_HEIGHT = 300;
 const WORLD_WIDTH  = 300;
 
@@ -6,13 +8,6 @@ const TILE_SIZE = 100;
 const CHARACTER_HEIGHT = TILE_SIZE;
 const CHARACTER_WIDTH  = TILE_SIZE;
 
-
-export const colorMap = {
-  red  : 'rgb(255, 0, 0)',
-  green: 'rgb(0, 255, 0)',
-  blue : 'rgb(0, 0, 255)',
-  white: 'rgb(255, 255, 255)'
-};
 
 export const worldProps = {
   id    : 'world',

@@ -1,4 +1,6 @@
-import generateRegion from './utils/generate-region/generateRegion';
+import {
+  generateRegionWithRandomColor
+} from './utils/generate-region/generateRegion';
 import {
   findCharacterInDOM,
   getRGBObj,
@@ -17,12 +19,16 @@ import {
 
 import './app.css';
 
-const regionsProps = [
-  generateRegion(0, 0, 'blue'),
-  generateRegion(200, 0, 'green'),
-  generateRegion(0, 200, 'green'),
-  generateRegion(200, 200, 'red')
+const regions = [
+  [0, 0],
+  [200, 0],
+  [0, 200],
+  [200, 200]
 ];
+
+const regionsProps = regions.map(regionCoords => {
+  return generateRegionWithRandomColor(...regionCoords);
+});
 
 const initializeWorld = ({ dom, worldProps, characterProps }) => {
   const WrappingDiv = dom.createElement('div');

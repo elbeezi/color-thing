@@ -1,6 +1,7 @@
 import {
+  getRandomColor,
   colorMap
-} from '../../variables';
+} from '../color-mapper/colorMapper';
 
 const generateRegion = (xValue, yValue, colorString) => {
   return {
@@ -13,4 +14,6 @@ const generateRegion = (xValue, yValue, colorString) => {
   };
 };
 
-export default generateRegion;
+export const generateRegionWithRandomColor = (x, y) => {
+  return generateRegion(x, y, getRandomColor());
+};
