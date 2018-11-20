@@ -1,18 +1,3 @@
-export const getRGBObj = colorString => {
-  const colorsOnly = colorString.slice(4, colorString.length - 1);
-  const colorsArr = colorsOnly.split(', ');
-
-  return {
-    red: parseInt(colorsArr[0], 10),
-    green: parseInt(colorsArr[1], 10),
-    blue: parseInt(colorsArr[2], 10)
-  };
-};
-
-export const stringifyRGB = ({ red, green, blue }) => {
-  return `rgb(${red}, ${green}, ${blue})`;
-};
-
 const incrementColorValue = (colorValue, changeAmount = 64) => {
   const COLOR_VALUE_MAX = 255;
   return Math.min(colorValue + changeAmount, COLOR_VALUE_MAX);
@@ -23,7 +8,7 @@ const decrementColorValue = (colorValue, changeAmount = 64) => {
   return Math.max(colorValue - changeAmount, COLOR_VALUE_MIN);
 };
 
-const moveTowardsRed = colorObject => {
+const moveToRed = colorObject => {
   return {
     ...colorObject,
     red  : incrementColorValue(colorObject.red),
@@ -32,7 +17,7 @@ const moveTowardsRed = colorObject => {
   };
 };
 
-const moveTowardsGreen = colorObject => {
+const moveToGreen = colorObject => {
   return {
     ...colorObject,
     red  : decrementColorValue(colorObject.red),
@@ -41,7 +26,7 @@ const moveTowardsGreen = colorObject => {
   };
 };
 
-const moveTowardsBlue = colorObject => {
+const moveToBlue = colorObject => {
   return {
     ...colorObject,
     red  : decrementColorValue(colorObject.red),
@@ -50,7 +35,7 @@ const moveTowardsBlue = colorObject => {
   };
 };
 
-const moveTowardsWhite = colorObject => {
+const moveToWhite = colorObject => {
   return {
     ...colorObject,
     red  : incrementColorValue(colorObject.red, 16),
@@ -59,21 +44,23 @@ const moveTowardsWhite = colorObject => {
   };
 };
 
-export const moveTowardsColor = (colorObject, targetColorString) => {
+const moveToColor = (colorObject, targetColorString) => {
   switch (targetColorString) {
     case 'red':
-      colorObject = moveTowardsRed(colorObject);
+      colorObject = moveToRed(colorObject);
       break;
     case 'green':
-      colorObject = moveTowardsGreen(colorObject);
+      colorObject = moveToGreen(colorObject);
       break;
     case 'blue':
-      colorObject = moveTowardsBlue(colorObject);
+      colorObject = moveToBlue(colorObject);
       break;
     case 'white':
-      colorObject = moveTowardsWhite(colorObject);
+      colorObject = moveToWhite(colorObject);
       break;
   }
 
   return colorObject;
 };
+
+export default moveToColor;

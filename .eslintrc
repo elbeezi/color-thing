@@ -5,7 +5,10 @@
     "jest": true,
     "node": true
   },
-  "extends": "eslint:recommended",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2018
@@ -37,6 +40,7 @@
     "space-infix-ops": [
       "warn",
       {}
-    ]
+    ],
+    "react/prop-types": "off"
   }
 }

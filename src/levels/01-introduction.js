@@ -1,12 +1,16 @@
 const introduction = {
-  worldWidth        : 500,
-  worldHeight       : 100,
+  width             : 500,
+  height            : 100,
 
   characterStartingX: 0,
   characterStartingY: 0,
 
   regions           : [
-    [200, 0, 'blue']
+    {
+      x: 200,
+      y: 0,
+      color: 'blue'
+    }
   ]
 };
 

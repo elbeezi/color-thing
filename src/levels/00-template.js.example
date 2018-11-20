@@ -1,14 +1,28 @@
+import { getRandomColor } from '../utils/map-color/mapColor';
+
 const exampleLevel = {
-  worldWidth        : 500,
-  worldHeight       : 500,
+  width             : 500,
+  height            : 500,
 
   characterStartingX: 0,
   characterStartingY: 0,
 
   regions           : [
-    [300, 0, 'red'],
-    [0, 300, 'green'],
-    [300, 300, 'blue']
+    {
+      x: 0,
+      y: 300,
+      color: 'red'
+    },
+    {
+      x: 300,
+      y: 0,
+      color: 'green'
+    },
+    {
+      x: 300,
+      y: 300,
+      color: getRandomColor()
+    },
   ]
 };
 

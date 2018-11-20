@@ -5,8 +5,6 @@ const colorMap = {
   white: 'rgb(255, 255, 255)'
 };
 
-export const mapColor = colorString => colorMap[colorString];
-
 
 const getRandomNumberOutOfThree = () => (Math.floor(Math.random() * 10) % 3);
 
@@ -15,3 +13,7 @@ export const getRandomColor = () => {
 
   return Object.keys(colorMap)[randomNum];
 };
+
+const mapColor = colorString => colorMap[colorString];
+export default mapColor;
+

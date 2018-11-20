@@ -1,11 +1,14 @@
 html,
 body {
-  width: 100vw;
-  height: 100vh;
   margin: 0;
   overflow: hidden;
 }
 
-.World {
+.Level {
+  position: absolute;
   border: 1px solid steelblue;
+}
+
+.Region {
+  position: absolute;
 }
