@@ -1,21 +1,36 @@
 import React from 'react';
-import Character from '../character/Character';
 import Level from '../level/Level';
-import levelOne from '../../levels/01-introduction';
-import levelTwo from '../../levels/02-corners';
+import levelOne from '../../level-configs/01-introduction';
+import levelTwo from '../../level-configs/02-corners';
 import keyBindings from '../../utils/key-bindings/keyBindings';
 import mapColor from '../../utils/map-color/mapColor';
 import moveToColor from '../../utils/move-to-color/moveToColor';
-import {
-  xVelocity,
-  yVelocity,
-  CHARACTER_HEIGHT,
-  CHARACTER_WIDTH
-} from '../../variables/commonVariables';
-import {
-  getRgbObj,
-  stringifyRgb
-} from '../../utils/rgb-converters/rgbConverters';
+
+const getAdjacentCharacterPositions = (character, maxCoordinates) => {
+  const {
+    position,
+    velocity
+  } = character;
+
+  return {
+    left: {
+      x: Math.max((position.x - velocity.x), 0),
+      y: position.y
+    },
+    right: {
+      x: Math.min(position.x + velocity.x, maxCoordinates.x),
+      y: position.y
+    },
+    up: {
+      x: position.x,
+      y: Math.max((position.y - velocity.y), 0)
+    },
+    down: {
+      x: position.x,
+      y: Math.min((position.y + velocity.y), maxCoordinates.y)
+    }
+  };
+};
 
 class World extends React.Component {
   constructor(props) {
@@ -25,9 +40,17 @@ class World extends React.Component {
 
     this.state = {
       character: {
-        x   : level.characterStartingX,
-        y   : level.characterStartingY,
-        fill: mapColor('white')
+        width   : 100,
+        height  : 100,
+        position: {
+          x: level.characterStartingX,
+          y: level.characterStartingY
+        },
+        velocity: {
+          x: 100,
+          y: 100
+        },
+        color   : mapColor('white')
       },
       level
     };
@@ -41,39 +64,35 @@ class World extends React.Component {
       level
     } = this.state;
 
-    const charXMax = level.width - CHARACTER_WIDTH;
-    const charYMax = level.height - CHARACTER_HEIGHT;
-
-    const characterX    = character.x;
-    const characterY    = character.y;
-    const characterFill = character.fill;
-
-    const left  = characterX - xVelocity;
-    const right = characterX + xVelocity;
-    const up    = characterY - yVelocity;
-    const down  = characterY + yVelocity;
-
-    const characterPropsToSet = {
-      x   : characterX,
-      y   : characterY,
-      fill: characterFill
+    const maxCoordinates = {
+      x: level.width - character.width,
+      y: level.height - character.height
     };
+
+    const {
+      left,
+      right,
+      up,
+      down
+    } = getAdjacentCharacterPositions(character, maxCoordinates);
+
+    let newCharacterPosition;
 
     switch (keyCode) {
       case LEFT:
-        characterPropsToSet.x = Math.max(left, 0);
+        newCharacterPosition = left;
         break;
 
       case RIGHT:
-        characterPropsToSet.x = Math.min(right, charXMax);
+        newCharacterPosition = right;
         break;
 
       case UP:
-        characterPropsToSet.y = Math.max(up, 0);
+        newCharacterPosition = up;
         break;
 
       case DOWN:
-        characterPropsToSet.y = Math.min(down, charYMax);
+        newCharacterPosition = down;
         break;
 
       default:
@@ -81,26 +100,27 @@ class World extends React.Component {
         return;
     }
 
-    if (characterX === characterPropsToSet.x && characterY === characterPropsToSet.y) {
-      // Character didn't move, so don't do anything.
+    const isSameX = newCharacterPosition.x === character.position.x;
+    const isSameY = newCharacterPosition.y === character.position.y;
+
+    if (isSameX && isSameY) {
+      // Character wouldn't move, so don't do anything.
       return;
     }
-
     const matchingRegion = level.regions.find(region => {
-      return region.x === characterPropsToSet.x && region.y === characterPropsToSet.y;
+      return region.x === newCharacterPosition.x && region.y === newCharacterPosition.y;
     });
 
-    const colorToMoveTo = matchingRegion ? matchingRegion.color : 'white';
+    const targetColor = matchingRegion ? matchingRegion.color : 'white';
 
-    const characterColorObj = getRgbObj(characterFill);
-    const newColorObj = moveToColor(characterColorObj, colorToMoveTo);
-
-    characterPropsToSet.fill = stringifyRgb(newColorObj);
+    const newColor = moveToColor(character.color, targetColor);
 
     this.setState({
       character: {
-        ...this.state.character,
-        ...characterPropsToSet
+        ...character,
+        ...newCharacterPosition,
+        position: newCharacterPosition,
+        color: newColor
       }
     });
   }

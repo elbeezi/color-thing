@@ -1,3 +1,19 @@
+export const getRgbObj = colorString => {
+  const colorsOnly = colorString.slice(4, colorString.length - 1);
+  const colorsArr = colorsOnly.split(', ');
+
+  return {
+    red: parseInt(colorsArr[0], 10),
+    green: parseInt(colorsArr[1], 10),
+    blue: parseInt(colorsArr[2], 10)
+  };
+};
+
+export const stringifyRgb = ({ red, green, blue }) => {
+  return `rgb(${red}, ${green}, ${blue})`;
+};
+
+
 const incrementColorValue = (colorValue, changeAmount = 64) => {
   const COLOR_VALUE_MAX = 255;
   return Math.min(colorValue + changeAmount, COLOR_VALUE_MAX);
@@ -44,23 +60,35 @@ const moveToWhite = colorObject => {
   };
 };
 
-const moveToColor = (colorObject, targetColorString) => {
+const moveToColorObject = (colorObject, targetColorString) => {
+  let newColorObject;
+
   switch (targetColorString) {
     case 'red':
-      colorObject = moveToRed(colorObject);
+      newColorObject = moveToRed(colorObject);
       break;
+
     case 'green':
-      colorObject = moveToGreen(colorObject);
+      newColorObject = moveToGreen(colorObject);
       break;
+
     case 'blue':
-      colorObject = moveToBlue(colorObject);
+      newColorObject = moveToBlue(colorObject);
       break;
+
     case 'white':
-      colorObject = moveToWhite(colorObject);
+      newColorObject = moveToWhite(colorObject);
       break;
   }
 
-  return colorObject;
+  return newColorObject;
+};
+
+const moveToColor = (rgbString, targetColorString) => {
+  const rgbObject = getRgbObj(rgbString);
+  const newRgbObject = moveToColorObject(rgbObject, targetColorString);
+
+  return stringifyRgb(newRgbObject);
 };
 
 export default moveToColor;

@@ -3,22 +3,22 @@ import mapColor from '../../utils/map-color/mapColor';
 
 const Region = (props) => {
   const {
-    x,
-    y,
+    x: left,
+    y: top,
     color
   } = props;
 
-  const regionProps = {
-    x,
-    y,
-    color,
-    fill: mapColor(color),
+  const styleProps = {
+    position: 'absolute',
+    left,
+    top,
+    backgroundColor: mapColor(color),
     width: 100,
     height: 100
   };
 
   return (
-    <rect {...regionProps} />
+    <div className='Region' style={styleProps}/>
   );
 };
 

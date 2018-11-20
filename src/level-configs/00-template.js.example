@@ -1,6 +1,6 @@
 import { getRandomColor } from '../utils/map-color/mapColor';
 
-const exampleLevel = {
+const levelConfig = {
   width             : 500,
   height            : 500,
 
@@ -26,4 +26,4 @@ const exampleLevel = {
   ]
 };
 
-export default exampleLevel;
+export default levelConfig;

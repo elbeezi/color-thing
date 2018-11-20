@@ -11,11 +11,18 @@ const Level = (props) => {
     regions
   } = props;
 
+  const styleProps = {
+    width,
+    height,
+    boxSizing: 'border-box',
+    border   : '1px solid steelblue'
+  };
+
   return (
-    <svg className='Level' x={0} y={0} width={width} height={height}>
-      <RegionList regions={regions} />
-      <Character {...character} />
-    </svg>
+    <div style={styleProps}>
+      <RegionList regions={regions}/>
+      <Character {...character}/>
+    </div>
   );
 };
 

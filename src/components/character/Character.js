@@ -1,24 +1,27 @@
-import {
-  CHARACTER_HEIGHT,
-  CHARACTER_WIDTH
-} from '../../variables/commonVariables';
-
 import React from 'react';
 
 const Character = (props) => {
-  const initialCharacterProps = {
-    height     : CHARACTER_HEIGHT,
-    width      : CHARACTER_WIDTH,
-    stroke     : 'purple',
-    strokeWidth: '2px'
+  const {
+    position: coordinates, // renamed to avoid confusion with CSS property `position` (used below)
+    width,
+    height,
+    color
+  } = props;
+
+  const { x, y } = coordinates;
+
+  const styleProps = {
+    position       : 'absolute',
+    left           : x,
+    top            : y,
+    width,
+    height,
+    backgroundColor: color,
+    boxSizing      : 'border-box',
+    border         : '2px solid purple'
   };
 
-  const characterProps = {
-    ...props,
-    ...initialCharacterProps
-  };
-
-  return <rect {...characterProps} />;
+  return <div className='Character' style={styleProps}/>;
 };
 
 export default Character;

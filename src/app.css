@@ -3,12 +3,3 @@ body {
   margin: 0;
   overflow: hidden;
 }
-
-.Level {
-  position: absolute;
-  border: 1px solid steelblue;
-}
-
-.Region {
-  position: absolute;
-}

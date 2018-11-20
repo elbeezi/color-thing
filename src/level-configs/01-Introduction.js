@@ -1,4 +1,4 @@
-const introduction = {
+const levelConfig = {
   width             : 500,
   height            : 100,
 
@@ -14,5 +14,5 @@ const introduction = {
   ]
 };
 
-export default introduction;
+export default levelConfig;
 

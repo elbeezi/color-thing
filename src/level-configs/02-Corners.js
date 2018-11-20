@@ -1,4 +1,4 @@
-const corners = {
+const levelConfig = {
   width             : 300,
   height            : 300,
 
@@ -29,4 +29,4 @@ const corners = {
   ]
 };
 
-export default corners;
+export default levelConfig;
