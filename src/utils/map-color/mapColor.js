@@ -1,17 +1,23 @@
-const colorMap = {
+import getRandomNumberBetweenZeroAndX from '../get-random-number/getRandomNumber';
+
+const primaryColorMap = {
   red  : 'rgb(255, 0, 0)',
   green: 'rgb(0, 255, 0)',
-  blue : 'rgb(0, 0, 255)',
+  blue : 'rgb(0, 0, 255)'
+};
+
+const colorMap = {
+  ...primaryColorMap,
   white: 'rgb(255, 255, 255)'
 };
 
 
-const getRandomNumberOutOfThree = () => (Math.floor(Math.random() * 10) % 3);
+export const getRandomPrimaryColorString = () => {
+  const primaryColorStringArray = Object.keys(primaryColorMap);
 
-export const getRandomColor = () => {
-  const randomNum = getRandomNumberOutOfThree();
+  const i = getRandomNumberBetweenZeroAndX(primaryColorStringArray.length);
 
-  return Object.keys(colorMap)[randomNum];
+  return primaryColorStringArray[i];
 };
 
 const mapColor = colorString => colorMap[colorString];

@@ -1,7 +1,6 @@
 import React from 'react';
 import Level from '../level/Level';
-import levelOne from '../../level-configs/01-introduction';
-import levelTwo from '../../level-configs/02-corners';
+import levelConfigs from '../../level-configs/levelConfigs';
 import keyBindings from '../../utils/key-bindings/keyBindings';
 import mapColor from '../../utils/map-color/mapColor';
 import moveToColor from '../../utils/move-to-color/moveToColor';
@@ -36,7 +35,7 @@ class World extends React.Component {
   constructor(props) {
     super(props);
 
-    const level = levelTwo;
+    const level = levelConfigs.level3;
 
     this.state = {
       character: {

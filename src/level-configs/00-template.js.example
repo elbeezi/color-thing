@@ -1,12 +1,61 @@
-import { getRandomColor } from '../utils/map-color/mapColor';
+import { getRandomPrimaryColorString } from '../utils/map-color/mapColor';
+import {
+  generateRandomRegionConfig,
+  generateListOfRandomRegionConfigs
+} from '../utils/randomize-regions/randomizeRegions';
+
+const tileDimensions = {
+  width: 100,
+  height: 100
+};
+
+const levelDimensionsInTiles = {
+  width: 3,
+  height: 3
+};
+
+const characterStartingPosition = {
+  x: 0,
+  y: 0
+};
+
+const regionGeneratorProps = {
+  level: levelDimensionsInTiles,
+  tile : tileDimensions,
+};
+
+const regionListGeneratorProps = {
+  ...regionGeneratorProps,
+  numRegions: 4,
+  existingTiles: [characterStartingPosition]
+};
 
 const levelConfig = {
+  /*
+    Size (width/height) of the level in pixels.
+
+    You can use a pixel count directly, or calculate it based on `tileDimensions`
+    and `levelDimensionsInTiles`.
+
+    (Levels don't have (x, y) position, since they always draw from (0, 0).)
+  */
   width             : 500,
-  height            : 500,
+  height            : tileDimensions.width * levelDimensionsInTiles.width,
 
-  characterStartingX: 0,
-  characterStartingY: 0,
+  /*
+    (x, y) position where the character will start when the level loads.
+  */
+  characterStartingX: characterStartingPosition.x,
+  characterStartingY: characterStartingPosition.y,
 
+  /*
+    List of config objects for colored regions to populate in the level.
+
+    These can be set manually, or randomized to varying degrees:
+      - A region's color can each be randomized
+      - A region can be randomly generated
+      - A list of regions can be randomly generated
+  */
   regions           : [
     {
       x: 0,
@@ -15,14 +64,11 @@ const levelConfig = {
     },
     {
       x: 300,
-      y: 0,
-      color: 'green'
-    },
-    {
-      x: 300,
       y: 300,
-      color: getRandomColor()
+      color: getRandomPrimaryColorString()
     },
+    // generateRandomRegionConfig(regionGeneratorProps),
+    // ...generateListOfRandomRegionConfigs(regionListGeneratorProps)
   ]
 };
 
