@@ -8,20 +8,31 @@ const Level = (props) => {
     height,
 
     character,
-    regions
+    regions,
+    tileSize
   } = props;
 
   const styleProps = {
-    width,
-    height,
+    width: tileSize * width,
+    height: tileSize * height,
     boxSizing: 'border-box',
-    border   : '1px solid steelblue'
+    border: '1px solid steelblue'
+  };
+
+  const regionListProps = {
+    regions,
+    tileSize
+  };
+
+  const characterProps = {
+    ...character,
+    tileSize
   };
 
   return (
     <div style={styleProps}>
-      <RegionList regions={regions}/>
-      <Character {...character}/>
+      <RegionList {...regionListProps} />
+      <Character {...characterProps} />
     </div>
   );
 };

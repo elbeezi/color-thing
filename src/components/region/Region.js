@@ -1,20 +1,26 @@
 import React from 'react';
 import mapColor from '../../utils/map-color/mapColor';
 
+/*
+  A colored tile.
+*/
 const Region = (props) => {
   const {
-    x: left,
-    y: top,
-    color
+    x,
+    y,
+    width,
+    height,
+    color,
+    tileSize
   } = props;
 
   const styleProps = {
-    position: 'absolute',
-    left,
-    top,
-    backgroundColor: mapColor(color),
-    width: 100,
-    height: 100
+    position       : 'absolute',
+    left           : tileSize * x,
+    top            : tileSize * y,
+    width          : tileSize * width,
+    height         : tileSize * height,
+    backgroundColor: mapColor(color)
   };
 
   return (

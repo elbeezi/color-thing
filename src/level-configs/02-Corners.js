@@ -1,29 +1,45 @@
+const tileSize = 100;
+
+const characterStartingPosition = {
+  x: 1,
+  y: 1
+};
+
 const levelConfig = {
-  width             : 300,
-  height            : 300,
+  tileSize,
 
-  characterStartingX: 100,
-  characterStartingY: 100,
+  width: 3,
+  height: 3,
 
-  regions           : [
+  characterStartingPosition,
+
+  regions: [
     {
       x: 0,
       y: 0,
+      width: 1,
+      height: 1,
       color: 'blue'
     },
     {
       x: 0,
-      y: 200,
+      y: 2,
+      width: 1,
+      height: 1,
       color: 'green'
     },
     {
-      x: 200,
+      x: 2,
       y: 0,
+      width: 1,
+      height: 1,
       color: 'green'
     },
     {
-      x: 200,
-      y: 200,
+      x: 2,
+      y: 2,
+      width: 1,
+      height: 1,
       color: 'red'
     }
   ]

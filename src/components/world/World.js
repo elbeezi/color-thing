@@ -13,7 +13,7 @@ const getAdjacentCharacterPositions = (character, maxCoordinates) => {
 
   return {
     left: {
-      x: Math.max((position.x - velocity.x), 0),
+      x: Math.max(position.x - velocity.x, 0),
       y: position.y
     },
     right: {
@@ -22,11 +22,11 @@ const getAdjacentCharacterPositions = (character, maxCoordinates) => {
     },
     up: {
       x: position.x,
-      y: Math.max((position.y - velocity.y), 0)
+      y: Math.max(position.y - velocity.y, 0)
     },
     down: {
       x: position.x,
-      y: Math.min((position.y + velocity.y), maxCoordinates.y)
+      y: Math.min(position.y + velocity.y, maxCoordinates.y)
     }
   };
 };
@@ -39,17 +39,17 @@ class World extends React.Component {
 
     this.state = {
       character: {
-        width   : 100,
-        height  : 100,
+        width: 1,
+        height: 1,
         position: {
-          x: level.characterStartingX,
-          y: level.characterStartingY
+          x: level.characterStartingPosition.x,
+          y: level.characterStartingPosition.y
         },
         velocity: {
-          x: 100,
-          y: 100
+          x: 1,
+          y: 1
         },
-        color   : mapColor('white')
+        color: mapColor('white')
       },
       level
     };
@@ -106,8 +106,12 @@ class World extends React.Component {
       // Character wouldn't move, so don't do anything.
       return;
     }
-    const matchingRegion = level.regions.find(region => {
-      return region.x === newCharacterPosition.x && region.y === newCharacterPosition.y;
+
+    const matchingRegion = level.regions.find((region) => {
+      return (
+        region.x === newCharacterPosition.x &&
+        region.y === newCharacterPosition.y
+      );
     });
 
     const targetColor = matchingRegion ? matchingRegion.color : 'white';
@@ -117,7 +121,6 @@ class World extends React.Component {
     this.setState({
       character: {
         ...character,
-        ...newCharacterPosition,
         position: newCharacterPosition,
         color: newColor
       }
@@ -145,7 +148,7 @@ class World extends React.Component {
 
     return (
       <div className='World'>
-        <Level {...levelProps}/>
+        <Level {...levelProps} />
       </div>
     );
   }

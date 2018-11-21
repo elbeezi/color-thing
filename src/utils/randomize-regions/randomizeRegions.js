@@ -2,14 +2,13 @@ import getRandomNumberBetweenZeroAndX from '../get-random-number/getRandomNumber
 import { getRandomPrimaryColorString } from '../map-color/mapColor';
 
 export const generateRandomRegionConfig = (props) => {
-  const {
-    level,
-    tile
-  } = props;
+  const { level } = props;
 
   return {
-    x    : getRandomNumberBetweenZeroAndX(level.width) * tile.width,
-    y    : getRandomNumberBetweenZeroAndX(level.height) * tile.height,
+    x: getRandomNumberBetweenZeroAndX(level.width),
+    y: getRandomNumberBetweenZeroAndX(level.height),
+    width: 1,
+    height: 1,
     color: getRandomPrimaryColorString()
   };
 };
@@ -18,7 +17,6 @@ export const generateListOfRandomRegionConfigs = (props) => {
   const {
     numRegions,
     level,
-    tile,
     otherTiles = []
   } = props;
 
@@ -29,8 +27,7 @@ export const generateListOfRandomRegionConfigs = (props) => {
   }
 
   const regionGeneratorProps = {
-    level,
-    tile
+    level
   };
 
   const regionConfigList = [];

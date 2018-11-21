@@ -2,12 +2,9 @@ import {
   generateListOfRandomRegionConfigs
 } from '../utils/randomize-regions/randomizeRegions';
 
-const tileDimensions = {
-  width: 100,
-  height: 100
-};
+const tileSize = 100;
 
-const levelDimensionsInTiles = {
+const levelDimensions = {
   width: 7,
   height: 7
 };
@@ -18,20 +15,21 @@ const characterStartingPosition = {
 };
 
 const regionListGeneratorProps = {
-  level: levelDimensionsInTiles,
-  tile : tileDimensions,
+  level: levelDimensions,
+  tileSize,
   numRegions: 20,
   otherTiles: [characterStartingPosition]
 };
 
 const levelConfig = {
-  width             : tileDimensions.width * levelDimensionsInTiles.width,
-  height            : tileDimensions.height * levelDimensionsInTiles.height,
+  tileSize,
 
-  characterStartingX: characterStartingPosition.x,
-  characterStartingY: characterStartingPosition.y,
+  width: levelDimensions.width,
+  height: levelDimensions.height,
 
-  regions           : generateListOfRandomRegionConfigs(regionListGeneratorProps)
+  characterStartingPosition,
+
+  regions: generateListOfRandomRegionConfigs(regionListGeneratorProps)
 };
 
 export default levelConfig;

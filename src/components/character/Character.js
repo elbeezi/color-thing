@@ -3,19 +3,19 @@ import React from 'react';
 const Character = (props) => {
   const {
     position: coordinates, // renamed to avoid confusion with CSS property `position` (used below)
+    color,
+
     width,
     height,
-    color
+    tileSize
   } = props;
-
-  const { x, y } = coordinates;
 
   const styleProps = {
     position       : 'absolute',
-    left           : x,
-    top            : y,
-    width,
-    height,
+    left           : tileSize * coordinates.x,
+    top            : tileSize * coordinates.y,
+    width          : tileSize * width,
+    height         : tileSize * height,
     backgroundColor: color,
     boxSizing      : 'border-box',
     border         : '2px solid purple'

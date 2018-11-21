@@ -4,13 +4,10 @@ import {
   generateListOfRandomRegionConfigs
 } from '../utils/randomize-regions/randomizeRegions';
 
-const tileDimensions = {
-  width: 100,
-  height: 100
-};
+const tileSize = 100;
 
-const levelDimensionsInTiles = {
-  width: 3,
+const levelDimensions = {
+  width: 5,
   height: 3
 };
 
@@ -20,8 +17,8 @@ const characterStartingPosition = {
 };
 
 const regionGeneratorProps = {
-  level: levelDimensionsInTiles,
-  tile : tileDimensions,
+  level: levelDimensions,
+  tileSize
 };
 
 const regionListGeneratorProps = {
@@ -32,15 +29,12 @@ const regionListGeneratorProps = {
 
 const levelConfig = {
   /*
-    Size (width/height) of the level in pixels.
-
-    You can use a pixel count directly, or calculate it based on `tileDimensions`
-    and `levelDimensionsInTiles`.
+    Size (width/height) of the level in tiles.
 
     (Levels don't have (x, y) position, since they always draw from (0, 0).)
   */
-  width             : 500,
-  height            : tileDimensions.width * levelDimensionsInTiles.width,
+  width             : levelDimensions.width,
+  height            : levelDimensions.height,
 
   /*
     (x, y) position where the character will start when the level loads.
@@ -59,12 +53,12 @@ const levelConfig = {
   regions           : [
     {
       x: 0,
-      y: 300,
+      y: 3,
       color: 'red'
     },
     {
-      x: 300,
-      y: 300,
+      x: 3,
+      y: 3,
       color: getRandomPrimaryColorString()
     },
     // generateRandomRegionConfig(regionGeneratorProps),
