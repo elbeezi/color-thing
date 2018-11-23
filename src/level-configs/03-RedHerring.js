@@ -1,8 +1,4 @@
 import { getRandomPrimaryColorString } from '../utils/map-color/mapColor';
-import {
-  generateRandomRegionConfig,
-  generateListOfRandomRegionConfigs
-} from '../utils/randomize-regions/randomizeRegions';
 
 const tileSize = 100;
 
@@ -16,20 +12,20 @@ const characterStartingPosition = {
   y: 0
 };
 
-const regionGeneratorProps = {
-  level: levelDimensions,
-  tileSize
-};
+// const regionGeneratorProps = {
+//   level: levelDimensions,
+//   tileSize
+// };
 
-const randomRegion = generateRandomRegionConfig(regionGeneratorProps);
+// const randomRegion = generateRandomRegionConfig(regionGeneratorProps);
 
-const regionListGeneratorProps = {
-  ...regionGeneratorProps,
-  numRegions: 4,
-  existingTiles: [characterStartingPosition, randomRegion]
-};
+// const regionListGeneratorProps = {
+//   ...regionGeneratorProps,
+//   numRegions: 4,
+//   existingTiles: [characterStartingPosition, randomRegion]
+// };
 
-const randomRegionList = generateListOfRandomRegionConfigs(regionListGeneratorProps);
+// const randomRegionList = generateListOfRandomRegionConfigs(regionListGeneratorProps);
 
 const levelConfig = {
   tileSize,

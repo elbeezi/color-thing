@@ -19,7 +19,7 @@
 1. `yarn test`
 
 ## Creating Levels
-1. Create a new file in `/src/level-configs/` (or copy the `.example` file in that dir)
+1. Create a new file in `/src/level-configs/` (or copy from an existing level)
 2. Import & re-export your new level within `/src/components/level-configs/levelConfigs.js`
-3. Update the `World` component constructor with the name of the level you want to play (has to match the property name exported in step 2)
+3. Update the `World`'s `activelLevelIndex` based on step 2
 4. GLHF

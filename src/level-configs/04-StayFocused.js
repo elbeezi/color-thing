@@ -14,11 +14,35 @@ const characterStartingPosition = {
   y: 0
 };
 
+const criticalRegion = {
+  x: 6,
+  y: 5,
+  width: 1,
+  height: 1,
+  color: 'green'
+};
+
+const protectedTile = {
+  x: 5,
+  y: 5
+};
+
+const gate = {
+  x: 6,
+  y: 6,
+  color: '#00ff00'
+};
+
 const regionListGeneratorProps = {
   level: levelDimensions,
   tileSize,
   numRegions: 20,
-  otherTiles: [characterStartingPosition]
+  otherTiles: [
+    characterStartingPosition,
+    gate,
+    criticalRegion,
+    protectedTile
+  ]
 };
 
 const levelConfig = {
@@ -29,7 +53,12 @@ const levelConfig = {
 
   characterStartingPosition,
 
-  regions: generateListOfRandomRegionConfigs(regionListGeneratorProps)
+  gate,
+
+  regions: [
+    criticalRegion,
+    ...generateListOfRandomRegionConfigs(regionListGeneratorProps)
+  ]
 };
 
 export default levelConfig;

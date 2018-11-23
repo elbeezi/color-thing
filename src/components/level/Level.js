@@ -2,47 +2,200 @@ import React from 'react';
 import Character from '../character/Character';
 import Gate from '../gate/Gate';
 import RegionList from '../region-list/RegionList';
+import keyBindings from '../../utils/key-bindings/keyBindings';
+import moveToColor from '../../utils/move-to-color/moveToColor';
 
-const Level = (props) => {
+const isSamePosition = (a, b) => a.x === b.x && a.y === b.y;
+
+const getAdjacentCharacterPositions = (character, maxCoordinates) => {
   const {
-    width,
-    height,
+    position,
+    velocity
+  } = character;
 
-    character,
-    gate,
-    regions,
-    tileSize
-  } = props;
-
-  const styleProps = {
-    width: tileSize * width,
-    height: tileSize * height,
-    boxSizing: 'border-box',
-    border: '1px solid steelblue'
+  return {
+    left: {
+      x: Math.max(position.x - velocity.x, 0),
+      y: position.y
+    },
+    right: {
+      x: Math.min(position.x + velocity.x, maxCoordinates.x),
+      y: position.y
+    },
+    up: {
+      x: position.x,
+      y: Math.max(position.y - velocity.y, 0)
+    },
+    down: {
+      x: position.x,
+      y: Math.min(position.y + velocity.y, maxCoordinates.y)
+    }
   };
-
-  const regionListProps = {
-    regions,
-    tileSize
-  };
-
-  const gateProps = {
-    ...gate,
-    tileSize
-  };
-
-  const characterProps = {
-    ...character,
-    tileSize
-  };
-
-  return (
-    <div style={styleProps}>
-      <RegionList {...regionListProps} />
-      <Character {...characterProps} />
-      <Gate {...gateProps} />
-    </div>
-  );
 };
+
+class Level extends React.Component {
+  constructor(props) {
+    super(props);
+
+    const {
+      characterStartingPosition
+    } = props;
+
+    this.state = {
+      character: {
+        width: 1,
+        height: 1,
+        position: characterStartingPosition,
+        velocity: {
+          x: 1,
+          y: 1
+        },
+        color: '#000000'
+      },
+    };
+
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+  }
+
+  handleKeyDown({ keyCode }) {
+    const {
+      width,
+      height,
+      gate,
+      regions,
+      onLevelUp
+    } = this.props;
+
+    const {
+      character
+    } = this.state;
+
+    const { UP, DOWN, LEFT, RIGHT } = keyBindings;
+
+    const maxCoordinates = {
+      x: width - character.width,
+      y: height - character.height
+    };
+
+    const {
+      left,
+      right,
+      up,
+      down
+    } = getAdjacentCharacterPositions(character, maxCoordinates);
+
+    let newCharacterPosition;
+
+    switch (keyCode) {
+      case LEFT:
+        newCharacterPosition = left;
+        break;
+
+      case RIGHT:
+        newCharacterPosition = right;
+        break;
+
+      case UP:
+        newCharacterPosition = up;
+        break;
+
+      case DOWN:
+        newCharacterPosition = down;
+        break;
+
+      default:
+        // A non-movement key was pressed, so don't do anything.
+        return;
+    }
+
+    const hasNotMoved = isSamePosition(newCharacterPosition, character.position);
+
+    if (hasNotMoved) {
+      return;
+    }
+
+    const isGate = isSamePosition(gate, newCharacterPosition);
+
+    if (isGate) {
+      if (gate.color === character.color) {
+        // win the level, change the level
+        onLevelUp();
+        return;
+      } else {
+        console.log('Match the gate\'s color to pass.');
+        // block movement
+        return;
+      }
+    }
+
+    const matchingRegion = regions.find((region) => {
+      return isSamePosition(region, newCharacterPosition);
+    });
+
+    const targetColor = matchingRegion ? matchingRegion.color : 'black';
+
+    const newColor = moveToColor(character.color, targetColor);
+
+    this.setState({
+      character: {
+        ...character,
+        position: newCharacterPosition,
+        color: newColor
+      }
+    });
+  }
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  render() {
+    const {
+      width,
+      height,
+      gate,
+      regions,
+      tileSize
+    } = this.props;
+
+    const {
+      character
+    } = this.state;
+
+    const styleProps = {
+      width: tileSize * width,
+      height: tileSize * height,
+      boxSizing: 'border-box',
+      border: '1px solid steelblue'
+    };
+
+    const regionListProps = {
+      regions,
+      tileSize
+    };
+
+    const gateProps = {
+      ...gate,
+      tileSize
+    };
+
+    const characterProps = {
+      ...character,
+      tileSize
+    };
+
+    return (
+      <div style={styleProps}>
+        <RegionList {...regionListProps} />
+        <Gate {...gateProps} />
+        <Character {...characterProps} />
+      </div>
+    );
+  }
+}
 
 export default Level;

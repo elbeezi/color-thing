@@ -42,7 +42,13 @@ const levelConfig = {
       height: 1,
       color: 'red'
     }
-  ]
+  ],
+
+  gate: {
+    x: 2,
+    y: 1,
+    color: '#400000'
+  }
 };
 
 export default levelConfig;

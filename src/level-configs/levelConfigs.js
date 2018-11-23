@@ -1,11 +1,11 @@
-import level0 from './00-example';
-import level1 from './01-Introduction';
-import level2 from './02-Corners';
-import level3 from './03-TooMuch';
+import intro from './01-Introduction';
+import corners from './02-Corners';
+import redHerring from './03-RedHerring';
+import stayFocused from './04-StayFocused';
 
 export default [
-  level0,
-  level1,
-  level2, // broken, movement does not work
-  level3 // broken, movement does not work
+  intro,
+  corners,
+  redHerring,
+  stayFocused,
 ];
