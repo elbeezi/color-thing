@@ -1,9 +1,17 @@
 import React from 'react';
+import styled from 'styled-components';
 import mapColor from '../../utils/map-color/mapColor';
 
-/*
-  A colored tile.
-*/
+const StyledRegion = styled.div`
+  position: absolute;
+  left: ${props => props.tileSize * props.coordinates.x}px;
+  top: ${props => props.tileSize * props.coordinates.y}px;
+  width: ${props => props.widthInTiles * props.tileSize}px;
+  height: ${props => props.heightInTiles * props.tileSize}px;
+  background-color: ${props => mapColor(props.color)};
+`;
+
+// A colored tile.
 const Region = (props) => {
   const {
     x,
@@ -15,16 +23,15 @@ const Region = (props) => {
   } = props;
 
   const styleProps = {
-    position       : 'absolute',
-    left           : tileSize * x,
-    top            : tileSize * y,
-    width          : tileSize * width,
-    height         : tileSize * height,
-    backgroundColor: mapColor(color)
+    color,
+    coordinates  : { x, y },
+    widthInTiles : width,
+    heightInTiles: height,
+    tileSize
   };
 
   return (
-    <div className='Region' style={styleProps}/>
+    <StyledRegion {...styleProps} />
   );
 };
 

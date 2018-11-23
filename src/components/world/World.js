@@ -1,6 +1,13 @@
 import React from 'react';
+import styled from 'styled-components';
 import Level from '../level/Level';
 import levelConfigs from '../../level-configs/levelConfigs';
+
+const StyledWorld = styled.div`
+  width           : 100vw;
+  height          : 100vh;
+  background-color: #000000;
+`;
 
 class World extends React.Component {
   constructor(props) {
@@ -26,16 +33,10 @@ class World extends React.Component {
       <Level {...activeLevelConfig} onLevelUp={onLevelUp} />
     );
 
-    const styleProps = {
-      width: '100vw',
-      height: '100vh',
-      backgroundColor: 'black'
-    };
-
     return (
-      <div className='World' style={styleProps}>
+      <StyledWorld>
         <ActiveLevel/>
-      </div>
+      </StyledWorld>
     );
   }
 }

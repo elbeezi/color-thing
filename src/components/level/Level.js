@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import Character from '../character/Character';
 import Gate from '../gate/Gate';
 import RegionList from '../region-list/RegionList';
@@ -32,6 +33,13 @@ const getAdjacentCharacterPositions = (character, maxCoordinates) => {
     }
   };
 };
+
+const StyledLevel = styled.div`
+  box-sizing: border-box;
+  width     : ${props => props.tileSize * props.widthInTiles}px;
+  height    : ${props => props.tileSize * props.heightInTiles}px;
+  border    : 1px solid steelblue;
+`;
 
 class Level extends React.Component {
   constructor(props) {
@@ -166,13 +174,6 @@ class Level extends React.Component {
       character
     } = this.state;
 
-    const styleProps = {
-      width: tileSize * width,
-      height: tileSize * height,
-      boxSizing: 'border-box',
-      border: '1px solid steelblue'
-    };
-
     const regionListProps = {
       regions,
       tileSize
@@ -188,12 +189,18 @@ class Level extends React.Component {
       tileSize
     };
 
+    const styleProps = {
+      widthInTiles : width,
+      heightInTiles: height,
+      tileSize
+    };
+
     return (
-      <div style={styleProps}>
+      <StyledLevel {...styleProps}>
         <RegionList {...regionListProps} />
         <Gate {...gateProps} />
         <Character {...characterProps} />
-      </div>
+      </StyledLevel>
     );
   }
 }

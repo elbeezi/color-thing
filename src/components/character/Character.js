@@ -1,27 +1,37 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const StyledCharacter = styled.div`
+  position        : absolute;
+  left            : ${props => props.tileSize * props.coordinates.x}px;
+  top             : ${props => props.tileSize * props.coordinates.y}px;
+  width           : ${props => props.tileSize * props.widthInTiles}px;
+  height          : ${props => props.tileSize * props.heightInTiles}px;
+  background-color: ${props => props.color};
+  box-sizing      : border-box;
+  border          : 2px solid purple;
+`;
 
 const Character = (props) => {
   const {
-    // renamed to avoid confusion with CSS property `position` (used below)
-    position: coordinates,
     color,
+    position,
     width,
     height,
     tileSize
   } = props;
 
+  // renaming some props to avoid collision with CSS properties or HTML attrs
   const styleProps = {
-    position       : 'absolute',
-    left           : tileSize * coordinates.x,
-    top            : tileSize * coordinates.y,
-    width          : tileSize * width,
-    height         : tileSize * height,
-    backgroundColor: color,
-    boxSizing      : 'border-box',
-    border         : '2px solid purple'
+    color,
+    coordinates  : position,
+    widthInTiles : width,
+    heightInTiles: height,
+    tileSize
   };
 
-  return <div className='Character' style={styleProps}/>;
+  return (
+    <StyledCharacter {...styleProps}/>
+  );
 };
-
 export default Character;
