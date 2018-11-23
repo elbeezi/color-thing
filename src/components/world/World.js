@@ -111,7 +111,7 @@ class World extends React.Component {
       return isSamePosition(region, newCharacterPosition);
     });
 
-    const targetColor = matchingRegion ? matchingRegion.color : 'white';
+    const targetColor = matchingRegion ? matchingRegion.color : 'black';
 
     const newColor = moveToColor(character.color, targetColor);
 
@@ -143,8 +143,14 @@ class World extends React.Component {
       character
     };
 
+    const styleProps = {
+      width: '100vw',
+      height: '100vh',
+      backgroundColor: 'black'
+    };
+
     return (
-      <div className='World'>
+      <div className='World' style={styleProps}>
         <Level {...levelProps} />
       </div>
     );

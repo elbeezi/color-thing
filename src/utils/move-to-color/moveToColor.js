@@ -49,6 +49,15 @@ const moveToWhite = (colorObject) => {
   };
 };
 
+const moveToBlack = (colorObject) => {
+  return {
+    ...colorObject,
+    red  : decrementColorValue(colorObject.red, 16),
+    green: decrementColorValue(colorObject.green, 16),
+    blue : decrementColorValue(colorObject.blue, 16)
+  };
+};
+
 const moveToColorObject = (colorObject, targetColorString) => {
   let newColorObject;
 
@@ -67,6 +76,10 @@ const moveToColorObject = (colorObject, targetColorString) => {
 
     case 'white':
       newColorObject = moveToWhite(colorObject);
+      break;
+
+    case 'black':
+      newColorObject = moveToBlack(colorObject);
       break;
   }
 

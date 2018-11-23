@@ -8,7 +8,8 @@ const primaryColorMap = {
 
 const colorMap = {
   ...primaryColorMap,
-  white: '#ffffff'
+  white: '#ffffff',
+  black: '#000000'
 };
 
 export const getRgbObjFromHex = (hexString) => {

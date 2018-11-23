@@ -46,7 +46,7 @@ module.exports = (env, argv) => {
         }
       ]
     },
-    devtool: isDevelopment && 'eval-source-map',
+    devtool: isDevelopment && 'inline-source-map',
     devServer: {
       contentBase: isDevelopment && './dist'
     }
