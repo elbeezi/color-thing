@@ -5,6 +5,8 @@ import keyBindings from '../../utils/key-bindings/keyBindings';
 import mapColor from '../../utils/map-color/mapColor';
 import moveToColor from '../../utils/move-to-color/moveToColor';
 
+let activeLevel = 0;
+
 const isSamePosition = (a, b) => a.x === b.x && a.y === b.y;
 
 const getAdjacentCharacterPositions = (character, maxCoordinates) => {
@@ -37,7 +39,8 @@ class World extends React.Component {
   constructor(props) {
     super(props);
 
-    const level = levelConfigs.level0;
+    const level = levelConfigs[Object.keys(levelConfigs)[activeLevel]];
+    activeLevel++;
 
     this.state = {
       character: {
@@ -55,6 +58,28 @@ class World extends React.Component {
       },
       level
     };
+  }
+
+  levelUp() {
+    const newLevel = levelConfigs[Object.keys(levelConfigs)[activeLevel]];
+    activeLevel++;
+    let nextLevelState = {
+      character: {
+        width: 1,
+        height: 1,
+        position: {
+          x: newLevel.characterStartingPosition.x,
+          y: newLevel.characterStartingPosition.y
+        },
+        velocity: {
+          x: 1,
+          y: 1
+        },
+        color: '#000000'
+      },
+      level: newLevel
+    };
+    this.setState(nextLevelState)
   }
 
   handleKeyDown({ keyCode }) {
@@ -117,6 +142,8 @@ class World extends React.Component {
       if (gate.color === character.color) {
         // win the level, change the level
         console.log('hooray!');
+        this.levelUp()
+        return;
       } else {
         console.log('match the gate\'s color to pass.');
         // block movement
