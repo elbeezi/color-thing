@@ -1,5 +1,6 @@
 import React from 'react';
 import Character from '../character/Character';
+import Gate from '../gate/Gate';
 import RegionList from '../region-list/RegionList';
 
 const Level = (props) => {
@@ -8,6 +9,7 @@ const Level = (props) => {
     height,
 
     character,
+    gate,
     regions,
     tileSize
   } = props;
@@ -24,6 +26,11 @@ const Level = (props) => {
     tileSize
   };
 
+  const gateProps = {
+    ...gate,
+    tileSize
+  };
+
   const characterProps = {
     ...character,
     tileSize
@@ -33,6 +40,7 @@ const Level = (props) => {
     <div style={styleProps}>
       <RegionList {...regionListProps} />
       <Character {...characterProps} />
+      <Gate {...gateProps} />
     </div>
   );
 };

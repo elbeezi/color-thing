@@ -37,7 +37,7 @@ class World extends React.Component {
   constructor(props) {
     super(props);
 
-    const level = levelConfigs.level3;
+    const level = levelConfigs.level0;
 
     this.state = {
       character: {
@@ -51,7 +51,7 @@ class World extends React.Component {
           x: 1,
           y: 1
         },
-        color: mapColor('white')
+        color: '#000000'
       },
       level
     };
@@ -64,6 +64,10 @@ class World extends React.Component {
       character,
       level
     } = this.state;
+
+    const {
+      gate
+    } = level;
 
     const maxCoordinates = {
       x: level.width - character.width,
@@ -105,6 +109,19 @@ class World extends React.Component {
 
     if (hasNotMoved) {
       return;
+    }
+
+    const isGate = isSamePosition(level.gate, newCharacterPosition);
+
+    if (isGate) {
+      if (gate.color === character.color) {
+        // win the level, change the level
+        console.log('hooray!');
+      } else {
+        console.log('match the gate\'s color to pass.');
+        // block movement
+        return;
+      }
     }
 
     const matchingRegion = level.regions.find((region) => {
