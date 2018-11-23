@@ -10,13 +10,9 @@ const StyledWorld = styled.div`
 `;
 
 class World extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      activeLevelIndex: 0
-    };
-  }
+  state = {
+    activeLevelIndex: 0
+  };
 
   render() {
     const { activeLevelIndex } = this.state;

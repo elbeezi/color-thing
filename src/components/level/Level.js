@@ -42,30 +42,20 @@ const StyledLevel = styled.div`
 `;
 
 class Level extends React.Component {
-  constructor(props) {
-    super(props);
-
-    const {
-      characterStartingPosition
-    } = props;
-
-    this.state = {
-      character: {
-        width: 1,
-        height: 1,
-        position: characterStartingPosition,
-        velocity: {
-          x: 1,
-          y: 1
-        },
-        color: '#000000'
+  state = {
+    character: {
+      width: 1,
+      height: 1,
+      position: this.props.characterStartingPosition,
+      velocity: {
+        x: 1,
+        y: 1
       },
-    };
+      color: '#000000'
+    },
+  };
 
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-  }
-
-  handleKeyDown({ keyCode }) {
+  handleKeyDown = ({ keyCode }) => {
     const {
       width,
       height,
@@ -151,7 +141,7 @@ class Level extends React.Component {
         color: newColor
       }
     });
-  }
+  };
 
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyDown);
