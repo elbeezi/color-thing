@@ -1,12 +1,12 @@
-import getRandomNumberBetweenZeroAndX from '../get-random-number/getRandomNumber';
+import getRandomInteger from '../get-random-integer/getRandomInteger';
 import { getRandomPrimaryColorString } from '../map-color/mapColor';
 
 export const generateRandomRegionConfig = (props) => {
   const { level } = props;
 
   return {
-    x: getRandomNumberBetweenZeroAndX(level.width),
-    y: getRandomNumberBetweenZeroAndX(level.height),
+    x: getRandomInteger(level.width),
+    y: getRandomInteger(level.height),
     width: 1,
     height: 1,
     color: getRandomPrimaryColorString()

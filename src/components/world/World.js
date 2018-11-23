@@ -5,6 +5,8 @@ import keyBindings from '../../utils/key-bindings/keyBindings';
 import mapColor from '../../utils/map-color/mapColor';
 import moveToColor from '../../utils/move-to-color/moveToColor';
 
+const isSamePosition = (a, b) => a.x === b.x && a.y === b.y;
+
 const getAdjacentCharacterPositions = (character, maxCoordinates) => {
   const {
     position,
@@ -99,19 +101,14 @@ class World extends React.Component {
         return;
     }
 
-    const isSameX = newCharacterPosition.x === character.position.x;
-    const isSameY = newCharacterPosition.y === character.position.y;
+    const hasNotMoved = isSamePosition(newCharacterPosition, character.position);
 
-    if (isSameX && isSameY) {
-      // Character wouldn't move, so don't do anything.
+    if (hasNotMoved) {
       return;
     }
 
     const matchingRegion = level.regions.find((region) => {
-      return (
-        region.x === newCharacterPosition.x &&
-        region.y === newCharacterPosition.y
-      );
+      return isSamePosition(region, newCharacterPosition);
     });
 
     const targetColor = matchingRegion ? matchingRegion.color : 'white';

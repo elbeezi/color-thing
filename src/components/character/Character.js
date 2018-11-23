@@ -2,9 +2,9 @@ import React from 'react';
 
 const Character = (props) => {
   const {
-    position: coordinates, // renamed to avoid confusion with CSS property `position` (used below)
+    // renamed to avoid confusion with CSS property `position` (used below)
+    position: coordinates,
     color,
-
     width,
     height,
     tileSize
