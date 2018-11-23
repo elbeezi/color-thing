@@ -2,10 +2,7 @@ import React from 'react';
 import Level from '../level/Level';
 import levelConfigs from '../../level-configs/levelConfigs';
 import keyBindings from '../../utils/key-bindings/keyBindings';
-import mapColor from '../../utils/map-color/mapColor';
 import moveToColor from '../../utils/move-to-color/moveToColor';
-
-let activeLevel = 0;
 
 const isSamePosition = (a, b) => a.x === b.x && a.y === b.y;
 
@@ -39,16 +36,18 @@ class World extends React.Component {
   constructor(props) {
     super(props);
 
-    const level = levelConfigs[Object.keys(levelConfigs)[activeLevel]];
-    activeLevel++;
+    const activeLevelIndex = 0;
+
+    const activeLevelConfig = levelConfigs[activeLevelIndex];
 
     this.state = {
+      activeLevelIndex,
       character: {
         width: 1,
         height: 1,
         position: {
-          x: level.characterStartingPosition.x,
-          y: level.characterStartingPosition.y
+          x: activeLevelConfig.characterStartingPosition.x,
+          y: activeLevelConfig.characterStartingPosition.y
         },
         velocity: {
           x: 1,
@@ -56,30 +55,32 @@ class World extends React.Component {
         },
         color: '#000000'
       },
-      level
+      level: activeLevelConfig
     };
   }
 
   levelUp() {
-    const newLevel = levelConfigs[Object.keys(levelConfigs)[activeLevel]];
-    activeLevel++;
-    let nextLevelState = {
+    const {
+      activeLevelIndex,
+      character
+    } = this.state;
+
+    const newLevelIndex = activeLevelIndex + 1;
+
+    const newLevelConfig = levelConfigs[newLevelIndex];
+
+    this.setState({
+      activeLevelIndex: newLevelIndex,
       character: {
-        width: 1,
-        height: 1,
+        ...character,
         position: {
-          x: newLevel.characterStartingPosition.x,
-          y: newLevel.characterStartingPosition.y
-        },
-        velocity: {
-          x: 1,
-          y: 1
+          x: newLevelConfig.characterStartingPosition.x,
+          y: newLevelConfig.characterStartingPosition.y
         },
         color: '#000000'
       },
-      level: newLevel
-    };
-    this.setState(nextLevelState)
+      level: newLevelConfig
+    });
   }
 
   handleKeyDown({ keyCode }) {
@@ -142,7 +143,7 @@ class World extends React.Component {
       if (gate.color === character.color) {
         // win the level, change the level
         console.log('hooray!');
-        this.levelUp()
+        this.levelUp();
         return;
       } else {
         console.log('match the gate\'s color to pass.');
