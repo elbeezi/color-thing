@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import mapColor from '../../utils/map-color/mapColor';
 
 const StyledRegion = styled.div`
   position: absolute;
@@ -8,7 +7,7 @@ const StyledRegion = styled.div`
   top: ${props => props.tileSize * props.coordinates.y}px;
   width: ${props => props.widthInTiles * props.tileSize}px;
   height: ${props => props.heightInTiles * props.tileSize}px;
-  background-color: ${props => mapColor(props.color)};
+  background-color: ${props => props.color};
 `;
 
 // A colored tile.

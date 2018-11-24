@@ -19,7 +19,7 @@
 1. `yarn test`
 
 ## Creating Levels
-1. Create a new file in `/src/level-configs/` (or copy from an existing level)
+1. Create a new file in `/src/level-configs/` (or copy an existing level)
 2. Import & re-export your new level within `/src/components/level-configs/levelConfigs.js`
 3. Update the `World`'s `activelLevelIndex` based on step 2
 4. GLHF

@@ -1,5 +1,15 @@
 import getRandomInteger from '../get-random-integer/getRandomInteger';
-import { getRandomPrimaryColorString } from '../map-color/mapColor';
+import { hexifyRgbObject } from '../hex-helpers/hexHelpers';
+
+export const getRandomHexColor = () => {
+  const rgbObject = {
+    red  : getRandomInteger(256),
+    green: getRandomInteger(256),
+    blue : getRandomInteger(256)
+  };
+
+  return hexifyRgbObject(rgbObject);
+};
 
 export const generateRandomRegionConfig = (props) => {
   const { level } = props;
@@ -9,7 +19,7 @@ export const generateRandomRegionConfig = (props) => {
     y: getRandomInteger(level.height),
     width: 1,
     height: 1,
-    color: getRandomPrimaryColorString()
+    color: getRandomHexColor()
   };
 };
 

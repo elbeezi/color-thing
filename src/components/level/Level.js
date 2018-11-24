@@ -4,7 +4,7 @@ import Character from '../character/Character';
 import Gate from '../gate/Gate';
 import RegionList from '../region-list/RegionList';
 import keyBindings from '../../utils/key-bindings/keyBindings';
-import moveToColor from '../../utils/move-to-color/moveToColor';
+import pickUpColor from '../../utils/pick-up-color/pickUpColor';
 
 const isSamePosition = (a, b) => a.x === b.x && a.y === b.y;
 
@@ -130,9 +130,10 @@ class Level extends React.Component {
       return isSamePosition(region, newCharacterPosition);
     });
 
-    const targetColor = matchingRegion ? matchingRegion.color : 'black';
+    const targetColor = matchingRegion ? matchingRegion.color : '#000000';
 
-    const newColor = moveToColor(character.color, targetColor);
+    const pickupAmount = targetColor === '#000000' ? 16 : 64;
+    const newColor = pickUpColor(character.color, targetColor, pickupAmount);
 
     this.setState({
       character: {

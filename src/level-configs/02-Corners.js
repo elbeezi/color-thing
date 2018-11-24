@@ -19,28 +19,28 @@ const levelConfig = {
       y: 0,
       width: 1,
       height: 1,
-      color: 'blue'
+      color: '#0000ff'
     },
     {
       x: 0,
       y: 2,
       width: 1,
       height: 1,
-      color: 'green'
+      color: '#00ff00'
     },
     {
       x: 2,
       y: 0,
       width: 1,
       height: 1,
-      color: 'green'
+      color: '#00ff00'
     },
     {
       x: 2,
       y: 2,
       width: 1,
       height: 1,
-      color: 'red'
+      color: '#ff0000'
     }
   ],
 

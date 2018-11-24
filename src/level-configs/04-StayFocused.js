@@ -19,7 +19,7 @@ const criticalRegion = {
   y: 5,
   width: 1,
   height: 1,
-  color: 'green'
+  color: '#00ff00'
 };
 
 const protectedTile = {

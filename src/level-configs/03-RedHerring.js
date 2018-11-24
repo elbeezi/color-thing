@@ -1,4 +1,4 @@
-import { getRandomPrimaryColorString } from '../utils/map-color/mapColor';
+import { getRandomHexColor } from '../utils/randomize-regions/randomizeRegions';
 
 const tileSize = 100;
 
@@ -54,14 +54,14 @@ const levelConfig = {
       y: 3,
       width: 1,
       height: 1,
-      color: 'red'
+      color: '#ff0000'
     },
     {
       x: 2,
       y: 1,
       width: 1,
       height: 1,
-      color: getRandomPrimaryColorString()
+      color: getRandomHexColor()
     },
     // randomRegion,
     // ...randomRegionList
