@@ -31,7 +31,7 @@ const Character = (props) => {
   };
 
   return (
-    <StyledCharacter {...styleProps}/>
+    <StyledCharacter className='Character' {...styleProps} />
   );
 };
 export default Character;

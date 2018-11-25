@@ -30,7 +30,7 @@ class World extends React.Component {
     );
 
     return (
-      <StyledWorld>
+      <StyledWorld className='World'>
         <ActiveLevel/>
       </StyledWorld>
     );

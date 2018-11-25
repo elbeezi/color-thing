@@ -30,7 +30,7 @@ const Region = (props) => {
   };
 
   return (
-    <StyledRegion {...styleProps} />
+    <StyledRegion className='Region' {...styleProps} />
   );
 };
 

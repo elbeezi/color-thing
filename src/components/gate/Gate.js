@@ -26,7 +26,7 @@ const Gate = (props) => {
   };
 
   return (
-    <StyledGate {...styleProps}/>
+    <StyledGate className='Gate' {...styleProps} />
   );
 };
 

@@ -3,36 +3,12 @@ import styled from 'styled-components';
 import Character from '../character/Character';
 import Gate from '../gate/Gate';
 import RegionList from '../region-list/RegionList';
+import getAdjacentCharacterPositions
+  from '../../utils/get-adjacent-character-positions/getAdjacentCharacterPositions';
 import keyBindings from '../../utils/key-bindings/keyBindings';
 import pickUpColor from '../../utils/pick-up-color/pickUpColor';
 
 const isSamePosition = (a, b) => a.x === b.x && a.y === b.y;
-
-const getAdjacentCharacterPositions = (character, maxCoordinates) => {
-  const {
-    position,
-    velocity
-  } = character;
-
-  return {
-    left: {
-      x: Math.max(position.x - velocity.x, 0),
-      y: position.y
-    },
-    right: {
-      x: Math.min(position.x + velocity.x, maxCoordinates.x),
-      y: position.y
-    },
-    up: {
-      x: position.x,
-      y: Math.max(position.y - velocity.y, 0)
-    },
-    down: {
-      x: position.x,
-      y: Math.min(position.y + velocity.y, maxCoordinates.y)
-    }
-  };
-};
 
 const StyledLevel = styled.div`
   box-sizing: border-box;
@@ -187,7 +163,7 @@ class Level extends React.Component {
     };
 
     return (
-      <StyledLevel {...styleProps}>
+      <StyledLevel className='Level' {...styleProps}>
         <RegionList {...regionListProps} />
         <Gate {...gateProps} />
         <Character {...characterProps} />

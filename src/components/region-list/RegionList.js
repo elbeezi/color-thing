@@ -7,14 +7,20 @@ const RegionList = (props) => {
     tileSize
   } = props;
 
-  return regions.map((region, i) => {
-    const regionProps = {
-      ...region,
-      tileSize
-    };
+  return (
+    <div className='RegionList'>
+      {
+        regions.map((region, i) => {
+          const regionProps = {
+            ...region,
+            tileSize
+          };
 
-    return <Region key={i} {...regionProps} />;
-  });
+          return <Region key={i} {...regionProps} />;
+        })
+      }
+    </div>
+  );
 };
 
 export default RegionList;
