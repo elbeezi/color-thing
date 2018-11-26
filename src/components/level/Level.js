@@ -23,10 +23,7 @@ class Level extends React.Component {
       width: 1,
       height: 1,
       position: this.props.characterStartingPosition,
-      velocity: {
-        x: 1,
-        y: 1
-      },
+      velocity: { x: 1, y: 1 },
       color: '#000000'
     },
   };
@@ -108,16 +105,17 @@ class Level extends React.Component {
 
     const targetColor = matchingRegion ? matchingRegion.color : '#000000';
 
-    const pickupAmount = targetColor === '#000000' ? 16 : 64;
+    // The magic numbers 17 and 68 make nice base-16 increments.
+    const pickupAmount = targetColor === '#000000' ? 17 : 68;
     const newColor = pickUpColor(character.color, targetColor, pickupAmount);
 
-    this.setState({
+    this.setState((state) => ({
       character: {
-        ...character,
+        ...state.character,
         position: newCharacterPosition,
         color: newColor
       }
-    });
+    }));
   };
 
   componentDidMount() {

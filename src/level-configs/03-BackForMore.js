@@ -3,8 +3,8 @@ import { getRandomHexColor } from '../utils/randomize-regions/randomizeRegions';
 const tileSize = 100;
 
 const levelDimensions = {
-  width: 4,
-  height: 4
+  width: 3,
+  height: 3
 };
 
 const characterStartingPosition = {
@@ -51,13 +51,13 @@ const levelConfig = {
   regions           : [
     {
       x: 0,
-      y: 3,
+      y: 2,
       width: 1,
       height: 1,
       color: '#ff0000'
     },
     {
-      x: 2,
+      x: 1,
       y: 1,
       width: 1,
       height: 1,
@@ -71,9 +71,9 @@ const levelConfig = {
     Config object for the level's victory gate.
   */
   gate: {
-    x: 3,
-    y: 3,
-    color: '#df0000'
+    x: 2,
+    y: 2,
+    color: '#660000'
   }
 };
 

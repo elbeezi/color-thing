@@ -47,7 +47,7 @@ const levelConfig = {
   gate: {
     x: 2,
     y: 1,
-    color: '#400000'
+    color: '#440000'
   }
 };
 
