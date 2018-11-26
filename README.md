@@ -21,5 +21,5 @@
 ## Creating Levels
 1. Create a new file in `/src/level-configs/` (or copy an existing level)
 2. Import & re-export your new level within `/src/components/level-configs/levelConfigs.js`
-3. Update the `World`'s `activelLevelIndex` based on step 2
+3. If you want to skip ahead to your new level, change the default state value in the `activeLevelIndex` reducer based on the order of exports you set in step 2.
 4. GLHF

@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import World from './components/world/World';
+import Game from './components/game/Game';
 
 import './app.css';
 
-ReactDOM.render(
-  <World/>,
-  document.getElementById('root')
+const App = () => (
+  <Game/>
 );
+
+export default App;

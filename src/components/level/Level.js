@@ -11,10 +11,11 @@ import pickUpColor from '../../utils/pick-up-color/pickUpColor';
 const isSamePosition = (a, b) => a.x === b.x && a.y === b.y;
 
 const StyledLevel = styled.div`
+  position: relative;
   box-sizing: border-box;
   width     : ${props => props.tileSize * props.widthInTiles}px;
   height    : ${props => props.tileSize * props.heightInTiles}px;
-  border    : 1px solid steelblue;
+  background: #000000;
 `;
 
 class Level extends React.Component {
@@ -34,7 +35,7 @@ class Level extends React.Component {
       height,
       gate,
       regions,
-      onLevelUp
+      onCompleteLevel
     } = this.props;
 
     const {
@@ -90,7 +91,7 @@ class Level extends React.Component {
     if (isGate) {
       if (gate.color === character.color) {
         // win the level, change the level
-        onLevelUp();
+        onCompleteLevel();
         return;
       } else {
         console.log('Match the gate\'s color to pass.');

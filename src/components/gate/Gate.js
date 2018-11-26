@@ -8,7 +8,8 @@ const StyledGate = styled.div`
   top       : ${props => props.tileSize * props.coordinates.y}px;
   width     : ${props => props.tileSize}px;
   height    : ${props => props.tileSize}px;
-  border    : 5px solid ${props => props.color};
+  border    : 15px solid ${props => props.color};
+  border-radius: 25px;
 `;
 
 const Gate = (props) => {
