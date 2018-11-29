@@ -11,6 +11,9 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch, { history }) => ({
   onCompleteLevel: (currentLevel) => () => {
     history.push(`/${parseInt(currentLevel, 10) + 1}`);
+  },
+  restartGame() {
+    history.push('/');
   }
 });
 
@@ -34,7 +37,8 @@ const VictoryText = () => <BigMessage>You win the game!</BigMessage>;
 const GamePure = (props) => {
   const {
     levelIndex,
-    onCompleteLevel
+    onCompleteLevel,
+    restartGame
   } = props;
 
   const isValidLevel = levelIndex >= 0 && levelIndex < levelConfigs.length;
@@ -47,10 +51,19 @@ const GamePure = (props) => {
     );
   };
 
+  const RestartGameButton = () => (
+    <button onClick={restartGame} disabled={levelIndex === 0}>
+      Restart Game
+    </button>
+  );
+
   return (
     <div>
+      <RestartGameButton/>
       <LevelWrapper>
-        {isValidLevel ? <ActiveLevel/> : <VictoryText/>}
+        {
+          activeLevelConfig ? <ActiveLevel/> : <VictoryText/>
+        }
       </LevelWrapper>
     </div>
   );
