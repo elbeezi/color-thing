@@ -1,14 +1,6 @@
 import { combineReducers } from 'redux';
-import activeLevelIndex from './activeLevelIndex';
+import victory from './victory';
 
 export default combineReducers({
-  activeLevelIndex
+  victory
 });
-
-/*
-  {
-    activeLevelIndex,
-    characterPosition,
-    characterColor
-  }
-*/

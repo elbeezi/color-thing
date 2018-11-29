@@ -5,14 +5,18 @@ import Level from '../level/Level';
 import levelConfigs from '../../level-configs/levelConfigs';
 
 const mapStateToProps = (state, ownProps) => ({
-  levelIndex: ownProps.match.params.level || state.activeLevelIndex || 0
+  levelIndex: parseInt(ownProps.match.params.level, 10) || 0,
+  victory: state.victory
 });
 
 const mapDispatchToProps = (dispatch, { history }) => ({
   onCompleteLevel: (currentLevel) => () => {
-    history.push(`/${parseInt(currentLevel, 10) + 1}`);
+    const isFinalLevel = currentLevel === levelConfigs.length - 1;
+    const incrementLevel = () => history.push(`/${parseInt(currentLevel, 10) + 1}`);
+    isFinalLevel ? dispatch({ type: 'WIN_GAME' }) : incrementLevel();
   },
   restartGame() {
+    dispatch({ type: 'START_GAME_OVER' });
     history.push('/');
   }
 });
@@ -34,11 +38,14 @@ const BigMessage = ({ children }) => (
 
 const VictoryText = () => <BigMessage>You win the game!</BigMessage>;
 
+const CheaterText = () => <BigMessage>Nice try, pal.</BigMessage>;
+
 const GamePure = (props) => {
   const {
     levelIndex,
     onCompleteLevel,
-    restartGame
+    restartGame,
+    victory
   } = props;
 
   const isValidLevel = levelIndex >= 0 && levelIndex < levelConfigs.length;
@@ -62,7 +69,9 @@ const GamePure = (props) => {
       <RestartGameButton/>
       <LevelWrapper>
         {
-          activeLevelConfig ? <ActiveLevel/> : <VictoryText/>
+          victory
+            ? <VictoryText/>
+            : isValidLevel ? <ActiveLevel/> : <CheaterText/>
         }
       </LevelWrapper>
     </div>
