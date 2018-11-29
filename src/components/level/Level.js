@@ -25,10 +25,36 @@ class Level extends React.Component {
       height: 1,
       position: this.props.characterStartingPosition,
       velocity: { x: 1, y: 1 },
-      color: '#000000'
+      color: this.props.characterStartingColor || '#000000'
     },
   };
 
+  /*
+    NOTE: Should definitely clean up this logic:
+
+    -> Key is pressed
+      a) Key is invalid
+    END: nothing happens
+      b) Key is movement key
+    continue
+
+    -> Character tries to move
+      a) New character position is invalid
+    END: nothing happens
+      b) New character position is valid
+    continue
+
+    -> New character position is examined
+      a) New character position is empty
+    END: character moves & character color decays
+      b) New character position has color
+    END: character moves & character picks up color
+      c) New character position is a gate
+        1) Character matches gate color
+    END: level complete
+        2) Character doesn't match gate color
+    END: nothing happens
+  */
   handleKeyDown = ({ keyCode }) => {
     const {
       width,
@@ -120,6 +146,7 @@ class Level extends React.Component {
   };
 
   componentDidMount() {
+    console.log(this.props.name);
     window.addEventListener('keydown', this.handleKeyDown);
   }
 

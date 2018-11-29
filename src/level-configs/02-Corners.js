@@ -1,17 +1,17 @@
-const tileSize = 100;
-
-const characterStartingPosition = {
-  x: 1,
-  y: 1
-};
-
 const levelConfig = {
-  tileSize,
+  name: 'Corners',
+
+  tileSize: 100,
 
   width: 3,
   height: 3,
 
-  characterStartingPosition,
+  characterStartingPosition: {
+    x: 1,
+    y: 1
+  },
+
+  characterStartingColor: '#000000',
 
   regions: [
     {

@@ -1,32 +1,30 @@
 const levelConfig = {
-  name: 'Introduction',
+  name: 'Intro Monochrome',
 
   tileSize: 100,
 
-  width: 7,
+  width: 8,
   height: 1,
 
+  characterStartingColor: '#555555',
+
   characterStartingPosition: {
-    x: 0,
+    x: 2,
     y: 0
   },
 
-  characterStartingColor: '#000000',
-
   regions: [
     {
-      x: 2,
+      x: 0,
       y: 0,
-      width: 1,
-      height: 1,
-      color: '#0000ff'
+      color: '#888888',
     }
   ],
 
   gate: {
-    x: 4,
+    x: 6,
     y: 0,
-    color: '#000033'
+    color: '#333333'
   },
 };
 

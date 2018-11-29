@@ -1,7 +1,9 @@
-const levelConfig = {
-  name: 'Introduction',
+const tileSize = 100;
 
-  tileSize: 100,
+const levelConfig = {
+  name: 'A Little Pick-Me-Up',
+
+  tileSize,
 
   width: 7,
   height: 1,
@@ -11,22 +13,22 @@ const levelConfig = {
     y: 0
   },
 
-  characterStartingColor: '#000000',
+  characterStartingColor: '#555555',
 
   regions: [
     {
-      x: 2,
+      x: 4,
       y: 0,
       width: 1,
       height: 1,
-      color: '#0000ff'
+      color: '#ffffff'
     }
   ],
 
   gate: {
-    x: 4,
+    x: 6,
     y: 0,
-    color: '#000033'
+    color: '#333333'
   },
 };
 

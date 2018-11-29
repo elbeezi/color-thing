@@ -1,44 +1,24 @@
 import { getRandomHexColor } from '../utils/randomize-regions/randomizeRegions';
 
-const tileSize = 100;
-
-const levelDimensions = {
-  width: 3,
-  height: 3
-};
-
-const characterStartingPosition = {
-  x: 0,
-  y: 0
-};
-
-// const regionGeneratorProps = {
-//   level: levelDimensions,
-//   tileSize
-// };
-
-// const randomRegion = generateRandomRegionConfig(regionGeneratorProps);
-
-// const regionListGeneratorProps = {
-//   ...regionGeneratorProps,
-//   numRegions: 4,
-//   existingTiles: [characterStartingPosition, randomRegion]
-// };
-
-// const randomRegionList = generateListOfRandomRegionConfigs(regionListGeneratorProps);
-
 const levelConfig = {
-  tileSize,
+  name: 'Back For More',
+
+  tileSize: 100,
   /*
     Size (width/height) of the level in tiles.
 
-    (Levels don't have (x, y) position, since they always draw from (0, 0).)
+    Level configs don't include (x, y) position; levels always draw from (0, 0)
   */
-  width             : levelDimensions.width,
-  height            : levelDimensions.height,
+  width: 3,
+  height: 3,
 
   // (x, y) position where the character will start when the level loads.
-  characterStartingPosition,
+  characterStartingPosition: {
+    x: 0,
+    y: 0
+  },
+
+  characterStartingColor: '#000000',
 
   /*
     List of config objects for colored regions to populate in the level.
@@ -48,7 +28,7 @@ const levelConfig = {
       - A region can be randomly generated
       - A list of regions can be randomly generated
   */
-  regions           : [
+  regions: [
     {
       x: 0,
       y: 2,
@@ -63,8 +43,6 @@ const levelConfig = {
       height: 1,
       color: getRandomHexColor()
     },
-    // randomRegion,
-    // ...randomRegionList
   ],
 
   /*
