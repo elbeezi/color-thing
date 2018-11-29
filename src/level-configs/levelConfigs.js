@@ -10,10 +10,10 @@ import rollTheDice from './05-RollTheDice';
 export default [
   fairlyStraightforward,
   intro,
-  introMonochrome,
   // aLittlePickMeUp, // NOTE: currently impossible
   corners,
   backForMore,
+  introMonochrome,
   stayFocused,
   // rollTheDice // NOTE: currently nearly guaranteed to be impossible
 ];
