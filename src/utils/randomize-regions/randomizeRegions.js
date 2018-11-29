@@ -1,11 +1,11 @@
-import getRandomInteger from '../get-random-integer/getRandomInteger';
+import { randomNumberUpTo } from '../random-numbers/randomNumbers';
 import { hexifyRgbObject } from '../hex-helpers/hexHelpers';
 
 export const getRandomHexColor = () => {
   const rgbObject = {
-    red  : getRandomInteger(256),
-    green: getRandomInteger(256),
-    blue : getRandomInteger(256)
+    red  : randomNumberUpTo(256),
+    green: randomNumberUpTo(256),
+    blue : randomNumberUpTo(256)
   };
 
   return hexifyRgbObject(rgbObject);
@@ -15,8 +15,8 @@ export const generateRandomRegionConfig = (props) => {
   const { level } = props;
 
   return {
-    x: getRandomInteger(level.width),
-    y: getRandomInteger(level.height),
+    x: randomNumberUpTo(level.width),
+    y: randomNumberUpTo(level.height),
     width: 1,
     height: 1,
     color: getRandomHexColor()
