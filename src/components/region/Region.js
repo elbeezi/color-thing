@@ -15,8 +15,8 @@ const Region = (props) => {
   const {
     x,
     y,
-    width,
-    height,
+    width = 1,
+    height = 1,
     color,
     tileSize
   } = props;
