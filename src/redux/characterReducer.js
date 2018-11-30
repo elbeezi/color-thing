@@ -1,4 +1,4 @@
-const character = (state = {}, action) => {
+const characterReducer = (state = {}, action) => {
   switch (action.type) {
     case 'MOVE_CHARACTER':
       return {
@@ -15,4 +15,4 @@ const character = (state = {}, action) => {
   }
 };
 
-export default character;
+export default characterReducer;

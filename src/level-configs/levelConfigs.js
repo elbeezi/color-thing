@@ -8,7 +8,7 @@ import stayFocused from './04-StayFocused';
 import rollTheDice from './05-RollTheDice';
 
 export default [
-  fairlyStraightforward,
+  // fairlyStraightforward, // NOTE: not great, since one misstep and it's unsolvable
   intro,
   // aLittlePickMeUp, // NOTE: currently impossible
   corners,

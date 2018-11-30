@@ -25,6 +25,10 @@ const StyledBigMessage = styled.h1`
   color: #ffffff;
 `;
 
+const StyledVictoryUI = styled.div`
+  text-align: center;
+`;
+
 const FlexWrapper = styled.div`
   display        : flex;
   justify-content: center;
@@ -36,7 +40,15 @@ const BigMessage = ({ children }) => (
   </StyledBigMessage>
 );
 
-const VictoryText = () => <BigMessage>You win the game!</BigMessage>;
+const RestartGameButton = ({ restartGame, levelIndex }) => (
+  <button onClick={restartGame} disabled={levelIndex === 0}>
+    Restart Game
+  </button>
+);
+
+const VictoryText = () => (
+  <BigMessage>You win the game!</BigMessage>
+);
 
 const CheaterText = () => <BigMessage>Nice try, pal.</BigMessage>;
 
@@ -52,25 +64,24 @@ const GamePure = (props) => {
 
   const activeLevelConfig = isValidLevel && levelConfigs[levelIndex];
 
-  const ActiveLevel = () => {
-    return (
-      <Level {...activeLevelConfig} onCompleteLevel={onCompleteLevel(levelIndex)} />
-    );
-  };
+  const ActiveLevel = () => (
+    <Level {...activeLevelConfig} onCompleteLevel={onCompleteLevel(levelIndex)} />
+  );
 
-  const RestartGameButton = () => (
-    <button onClick={restartGame} disabled={levelIndex === 0}>
-      Restart Game
-    </button>
+  const VictoryUI = () => (
+    <StyledVictoryUI>
+      <VictoryText/>
+      <RestartGameButton restartGame={restartGame} levelIndex={levelIndex}/>
+    </StyledVictoryUI>
   );
 
   return (
     <div>
-      <RestartGameButton/>
+      {!victory && <RestartGameButton restartGame={restartGame} levelIndex={levelIndex} />}
       <FlexWrapper>
         {
           victory
-            ? <VictoryText/>
+            ? <VictoryUI/>
             : isValidLevel ? <ActiveLevel/> : <CheaterText/>
         }
       </FlexWrapper>

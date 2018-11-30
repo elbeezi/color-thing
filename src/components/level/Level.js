@@ -11,6 +11,16 @@ import pickUpColor from '../../utils/pick-up-color/pickUpColor';
 
 const isSamePosition = (a, b) => a.x === b.x && a.y === b.y;
 
+const LevelWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const TextBlock = styled.div`
+  text-align: center;
+  color: white;
+`;
+
 const StyledLevel = styled.div`
   position: relative;
   box-sizing: border-box;
@@ -19,8 +29,17 @@ const StyledLevel = styled.div`
   background: #000000;
 `;
 
-const mapStateToProps = (state) => ({
-  character: state.character
+const GateBlockedText = () => {
+  // NOTE: explicitly assigned in order to escape apostrophe character
+  const text = 'Match the gate\'s color to pass.';
+  return (
+    <TextBlock>{text}</TextBlock>
+  );
+};
+
+const mapStateToProps = ({ character, isGateBlocked }) => ({
+  character,
+  isGateBlocked,
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -46,6 +65,16 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch({
       type: 'CHANGE_CHARACTER_COLOR',
       color: ownProps.characterStartingColor
+    });
+  },
+  setGateBlocked() {
+    dispatch({
+      type: 'SET_GATE_BLOCKED'
+    })
+  },
+  resetGateBlocked() {
+    dispatch({
+      type: 'SET_GATE_UNBLOCKED'
     });
   }
 });
@@ -90,6 +119,7 @@ class Level extends React.Component {
       regions,
       moveCharacter,
       onCompleteLevel,
+      setGateBlocked
     } = this.props;
 
     const maxCoordinates = {
@@ -108,16 +138,12 @@ class Level extends React.Component {
 
     const isGate = isSamePosition(gate, newCharacterPosition);
 
-    if (isGate) {
-      if (gate.color === character.color) {
-        // win the level, change the level
-        onCompleteLevel();
-        return;
-      } else {
-        console.log('Match the gate\'s color to pass.');
-        // block movement
-        return;
-      }
+    if (isGate && gate.color === character.color) {
+      // win the level, change the level
+      return onCompleteLevel();
+    } else if (isGate) {
+      // block movement
+      return setGateBlocked();
     }
 
     moveCharacter(newCharacterPosition);
@@ -140,15 +166,14 @@ class Level extends React.Component {
 
   componentDidMount() {
     const {
-      name,
+      resetGateBlocked,
       setInitialCharacterColor,
       setInitialCharacterPosition
     } = this.props;
 
-    console.log(name);
-
     setInitialCharacterPosition();
     setInitialCharacterColor();
+    resetGateBlocked();
 
     window.addEventListener('keydown', this.handleKeyDown);
   }
@@ -160,9 +185,11 @@ class Level extends React.Component {
   render() {
     const {
       character,
+      isGateBlocked,
       width,
       height,
       gate,
+      name,
       regions,
       tileSize
     } = this.props;
@@ -189,11 +216,15 @@ class Level extends React.Component {
     };
 
     return (
-      <StyledLevel className='Level' {...styleProps}>
-        <RegionList {...regionListProps} />
-        <Gate {...gateProps} />
-        <Character {...characterProps} />
-      </StyledLevel>
+      <LevelWrapper>
+        <TextBlock>{name}</TextBlock>
+        <StyledLevel className='Level' {...styleProps}>
+          <RegionList {...regionListProps} />
+          <Gate {...gateProps} />
+          <Character {...characterProps} />
+        </StyledLevel>
+        {isGateBlocked && <GateBlockedText/>}
+      </LevelWrapper>
     );
   }
 }

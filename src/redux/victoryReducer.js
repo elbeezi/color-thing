@@ -1,4 +1,4 @@
-const victory = (state = false, action) => {
+const victoryReducer = (state = false, action) => {
   switch (action.type) {
     case 'WIN_GAME':
       return true;
@@ -9,4 +9,4 @@ const victory = (state = false, action) => {
   }
 };
 
-export default victory;
+export default victoryReducer;
