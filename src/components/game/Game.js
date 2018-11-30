@@ -25,7 +25,7 @@ const StyledBigMessage = styled.h1`
   color: #ffffff;
 `;
 
-const LevelWrapper = styled.div`
+const FlexWrapper = styled.div`
   display        : flex;
   justify-content: center;
 `;
@@ -67,13 +67,13 @@ const GamePure = (props) => {
   return (
     <div>
       <RestartGameButton/>
-      <LevelWrapper>
+      <FlexWrapper>
         {
           victory
             ? <VictoryText/>
             : isValidLevel ? <ActiveLevel/> : <CheaterText/>
         }
-      </LevelWrapper>
+      </FlexWrapper>
     </div>
   );
 };

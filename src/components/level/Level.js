@@ -1,11 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Character from '../character/Character';
 import Gate from '../gate/Gate';
 import RegionList from '../region-list/RegionList';
-import getAdjacentCharacterPositions
-  from '../../utils/get-adjacent-character-positions/getAdjacentCharacterPositions';
-import keyBindings from '../../utils/key-bindings/keyBindings';
+import {
+  getAdjacentCharacterPosition
+} from '../../utils/get-adjacent-character-positions/getAdjacentCharacterPositions';
 import pickUpColor from '../../utils/pick-up-color/pickUpColor';
 
 const isSamePosition = (a, b) => a.x === b.x && a.y === b.y;
@@ -18,16 +19,38 @@ const StyledLevel = styled.div`
   background: #000000;
 `;
 
+const mapStateToProps = (state) => ({
+  character: state.character
+});
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  moveCharacter(position) {
+    dispatch({
+      type: 'MOVE_CHARACTER',
+      position
+    });
+  },
+  changeCharacterColor(color) {
+    dispatch({
+      type: 'CHANGE_CHARACTER_COLOR',
+      color
+    });
+  },
+  setInitialCharacterPosition() {
+    dispatch({
+      type: 'MOVE_CHARACTER',
+      position: ownProps.characterStartingPosition
+    });
+  },
+  setInitialCharacterColor() {
+    dispatch({
+      type: 'CHANGE_CHARACTER_COLOR',
+      color: ownProps.characterStartingColor
+    });
+  }
+});
+
 class Level extends React.Component {
-  state = {
-    character: {
-      width: 1,
-      height: 1,
-      position: this.props.characterStartingPosition,
-      velocity: { x: 1, y: 1 },
-      color: this.props.characterStartingColor || '#000000'
-    },
-  };
 
   /*
     NOTE: Should definitely clean up this logic:
@@ -55,60 +78,31 @@ class Level extends React.Component {
         2) Character doesn't match gate color
     END: nothing happens
   */
+  // NOTE: explicit assignment syntax in order to preserve lexical scope
   handleKeyDown = ({ keyCode }) => {
     const {
+      changeCharacterColor,
+      character,
       width,
       height,
       gate,
+      keepColor,
       regions,
-      onCompleteLevel
+      moveCharacter,
+      onCompleteLevel,
     } = this.props;
-
-    const {
-      character
-    } = this.state;
-
-    const { UP, DOWN, LEFT, RIGHT } = keyBindings;
 
     const maxCoordinates = {
       x: width - character.width,
       y: height - character.height
     };
 
-    const {
-      left,
-      right,
-      up,
-      down
-    } = getAdjacentCharacterPositions(character, maxCoordinates);
-
-    let newCharacterPosition;
-
-    switch (keyCode) {
-      case LEFT:
-        newCharacterPosition = left;
-        break;
-
-      case RIGHT:
-        newCharacterPosition = right;
-        break;
-
-      case UP:
-        newCharacterPosition = up;
-        break;
-
-      case DOWN:
-        newCharacterPosition = down;
-        break;
-
-      default:
-        // A non-movement key was pressed, so don't do anything.
-        return;
-    }
+    const newCharacterPosition = getAdjacentCharacterPosition(character, maxCoordinates, keyCode);
 
     const hasNotMoved = isSamePosition(newCharacterPosition, character.position);
 
     if (hasNotMoved) {
+      // We don't want to decay color if we haven't moved.
       return;
     }
 
@@ -126,27 +120,36 @@ class Level extends React.Component {
       }
     }
 
+    moveCharacter(newCharacterPosition);
+
     const matchingRegion = regions.find((region) => {
       return isSamePosition(region, newCharacterPosition);
     });
 
-    const targetColor = matchingRegion ? matchingRegion.color : '#000000';
+    let newColor;
 
-    // The magic numbers 17 and 68 make nice base-16 increments.
-    const pickupAmount = targetColor === '#000000' ? 17 : 68;
-    const newColor = pickUpColor(character.color, targetColor, pickupAmount);
-
-    this.setState((state) => ({
-      character: {
-        ...state.character,
-        position: newCharacterPosition,
-        color: newColor
-      }
-    }));
+    // The magic numbers 17 and 68 make nice base-16 increments for hex colors.
+    if (matchingRegion) {
+      newColor = pickUpColor(character.color, matchingRegion.color, 68);
+      changeCharacterColor(newColor);
+    } else if (!keepColor) {
+      newColor = pickUpColor(character.color, '#000000', 17);
+      changeCharacterColor(newColor);
+    }
   };
 
   componentDidMount() {
-    console.log(this.props.name);
+    const {
+      name,
+      setInitialCharacterColor,
+      setInitialCharacterPosition
+    } = this.props;
+
+    console.log(name);
+
+    setInitialCharacterPosition();
+    setInitialCharacterColor();
+
     window.addEventListener('keydown', this.handleKeyDown);
   }
 
@@ -156,16 +159,13 @@ class Level extends React.Component {
 
   render() {
     const {
+      character,
       width,
       height,
       gate,
       regions,
       tileSize
     } = this.props;
-
-    const {
-      character
-    } = this.state;
 
     const regionListProps = {
       regions,
@@ -198,4 +198,9 @@ class Level extends React.Component {
   }
 }
 
-export default Level;
+const EnhancedLevel = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Level);
+
+export default EnhancedLevel;
