@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import ColorInfo from '../color-info/ColorInfo';
 
 const StyledCharacter = styled.div`
   position        : absolute;
@@ -31,7 +32,9 @@ const Character = (props) => {
   };
 
   return (
-    <StyledCharacter className='Character' {...styleProps} />
+    <StyledCharacter className='Character' {...styleProps}>
+      <ColorInfo color={color} />
+    </StyledCharacter>
   );
 };
 export default Character;

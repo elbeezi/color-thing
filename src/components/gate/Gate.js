@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import ColorInfo from '../color-info/ColorInfo';
 
 const StyledGate = styled.div`
   box-sizing: border-box;
@@ -27,7 +28,9 @@ const Gate = (props) => {
   };
 
   return (
-    <StyledGate className='Gate' {...styleProps} />
+    <StyledGate className='Gate' {...styleProps}>
+      <ColorInfo color={color} />
+    </StyledGate>
   );
 };
 
