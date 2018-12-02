@@ -3,21 +3,28 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Level from '../level/Level';
 import levelConfigs from '../../level-configs/levelConfigs';
+import NextLevelModal from '../next-level/NextLevelModal';
 
 const mapStateToProps = (state, ownProps) => ({
   levelIndex: parseInt(ownProps.match.params.level, 10) || 0,
-  victory: state.victory
+  victory: state.victory,
+  showModal: state.showModal
 });
 
 const mapDispatchToProps = (dispatch, { history }) => ({
   onCompleteLevel: (currentLevel) => () => {
     const isFinalLevel = currentLevel === levelConfigs.length - 1;
-    const incrementLevel = () => history.push(`/${parseInt(currentLevel, 10) + 1}`);
+    const incrementLevel = () => dispatch({ type: 'COMPLETE_LEVEL'});
     isFinalLevel ? dispatch({ type: 'WIN_GAME' }) : incrementLevel();
   },
   restartGame() {
     dispatch({ type: 'START_GAME_OVER' });
     history.push('/');
+  },
+  nextLevel: (currentLevel) => () => {
+    const isFinalLevel = currentLevel === levelConfigs.length - 1;
+    dispatch({ type: 'DURING_LEVEL'});
+    history.push(`/${parseInt(currentLevel, 10) + 1}`);
   }
 });
 
@@ -57,7 +64,9 @@ const GamePure = (props) => {
     levelIndex,
     onCompleteLevel,
     restartGame,
-    victory
+    victory,
+    showModal,
+    nextLevel,
   } = props;
 
   const isValidLevel = levelIndex >= 0 && levelIndex < levelConfigs.length;
@@ -77,6 +86,7 @@ const GamePure = (props) => {
 
   return (
     <div>
+      {showModal && <NextLevelModal show={showModal} nextLevel={nextLevel(levelIndex)}></NextLevelModal>}
       {!victory && <RestartGameButton restartGame={restartGame} levelIndex={levelIndex} />}
       <FlexWrapper>
         {

@@ -76,7 +76,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch({
       type: 'SET_GATE_UNBLOCKED'
     });
-  }
+  },
 });
 
 class Level extends React.Component {
@@ -119,7 +119,8 @@ class Level extends React.Component {
       regions,
       moveCharacter,
       onCompleteLevel,
-      setGateBlocked
+      setGateBlocked,
+      showModal,
     } = this.props;
 
     const maxCoordinates = {
