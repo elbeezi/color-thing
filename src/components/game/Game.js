@@ -3,20 +3,24 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Level from '../level/Level';
 import levelConfigs from '../../level-configs/levelConfigs';
+import {
+  winGame,
+  restartGame
+} from '../../redux/game/gameActions';
 
 const mapStateToProps = (state, ownProps) => ({
   levelIndex: parseInt(ownProps.match.params.level, 10) || 0,
-  victory: state.victory
+  gameOverState: state.game.gameOverState
 });
 
 const mapDispatchToProps = (dispatch, { history }) => ({
   onCompleteLevel: (currentLevel) => () => {
     const isFinalLevel = currentLevel === levelConfigs.length - 1;
     const incrementLevel = () => history.push(`/${parseInt(currentLevel, 10) + 1}`);
-    isFinalLevel ? dispatch({ type: 'WIN_GAME' }) : incrementLevel();
+    isFinalLevel ? dispatch(winGame()) : incrementLevel();
   },
   restartGame() {
-    dispatch({ type: 'START_GAME_OVER' });
+    dispatch(restartGame());
     history.push('/');
   }
 });
@@ -26,6 +30,10 @@ const StyledBigMessage = styled.h1`
 `;
 
 const StyledVictoryUI = styled.div`
+  text-align: center;
+`;
+
+const StyledFailureUI = styled.div`
   text-align: center;
 `;
 
@@ -40,29 +48,33 @@ const BigMessage = ({ children }) => (
   </StyledBigMessage>
 );
 
-const RestartGameButton = ({ restartGame, levelIndex }) => (
-  <button onClick={restartGame} disabled={levelIndex === 0}>
-    Restart Game
-  </button>
-);
-
 const VictoryText = () => (
   <BigMessage>You win the game!</BigMessage>
 );
 
-const CheaterText = () => <BigMessage>Nice try, pal.</BigMessage>;
+const FailureText = () => (
+  <BigMessage>You bled out.</BigMessage>
+);
+
+const CheaterText = () => (
+  <BigMessage>Nice try, pal.</BigMessage>
+);
 
 const GamePure = (props) => {
   const {
+    gameOverState,
     levelIndex,
     onCompleteLevel,
-    restartGame,
-    victory
+    restartGame
   } = props;
 
   const isValidLevel = levelIndex >= 0 && levelIndex < levelConfigs.length;
 
   const activeLevelConfig = isValidLevel && levelConfigs[levelIndex];
+
+  const RestartGameButton = () => (
+    <button onClick={restartGame}>Restart Game</button>
+  );
 
   const ActiveLevel = () => (
     <Level {...activeLevelConfig} onCompleteLevel={onCompleteLevel(levelIndex)} />
@@ -71,21 +83,38 @@ const GamePure = (props) => {
   const VictoryUI = () => (
     <StyledVictoryUI>
       <VictoryText/>
-      <RestartGameButton restartGame={restartGame} levelIndex={levelIndex}/>
+      <RestartGameButton/>
     </StyledVictoryUI>
   );
 
-  return (
+  const FailureUI = () => (
+    <StyledFailureUI>
+      <FailureText/>
+      <RestartGameButton/>
+    </StyledFailureUI>
+  );
+
+  const victory = gameOverState === 'victory';
+
+  const isGameOver = !!gameOverState;
+
+  const GameOverUI = () => (
+    <FlexWrapper>
+      {victory ? <VictoryUI/> : <FailureUI/>}
+    </FlexWrapper>
+  );
+
+  const LevelWrapper = () => (
     <div>
-      {!victory && <RestartGameButton restartGame={restartGame} levelIndex={levelIndex} />}
+      <RestartGameButton/>
       <FlexWrapper>
-        {
-          victory
-            ? <VictoryUI/>
-            : isValidLevel ? <ActiveLevel/> : <CheaterText/>
-        }
+        {isValidLevel ? <ActiveLevel/> : <CheaterText/>}
       </FlexWrapper>
     </div>
+  );
+
+  return (
+    isGameOver ? <GameOverUI/> : <LevelWrapper/>
   );
 };
 

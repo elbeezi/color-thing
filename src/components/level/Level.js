@@ -8,6 +8,16 @@ import {
   getAdjacentCharacterPosition
 } from '../../utils/get-adjacent-character-positions/getAdjacentCharacterPositions';
 import pickUpColor from '../../utils/pick-up-color/pickUpColor';
+import {
+  changeCharacterColor,
+  setCharacterPosition,
+} from '../../redux/character/characterActions';
+import {
+  loseGame
+} from '../../redux/game/gameActions';
+import {
+  setGateBlocked
+} from '../../redux/gate/gateActions';
 
 const isSamePosition = (a, b) => a.x === b.x && a.y === b.y;
 
@@ -29,54 +39,20 @@ const StyledLevel = styled.div`
   background: #000000;
 `;
 
-const GateBlockedText = () => {
-  // NOTE: explicitly assigned in order to escape apostrophe character
-  const text = 'Match the gate\'s color to pass.';
-  return (
-    <TextBlock>{text}</TextBlock>
-  );
-};
+const GateBlockedText = () => (
+  <TextBlock>{'Match the gate\'s color to pass.'}</TextBlock>
+);
 
-const mapStateToProps = ({ character, isGateBlocked }) => ({
+const mapStateToProps = ({ character, gate }) => ({
   character,
-  isGateBlocked,
+  isGateBlocked: gate.isBlocked,
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  moveCharacter(position) {
-    dispatch({
-      type: 'MOVE_CHARACTER',
-      position
-    });
-  },
-  changeCharacterColor(color) {
-    dispatch({
-      type: 'CHANGE_CHARACTER_COLOR',
-      color
-    });
-  },
-  setInitialCharacterPosition() {
-    dispatch({
-      type: 'MOVE_CHARACTER',
-      position: ownProps.characterStartingPosition
-    });
-  },
-  setInitialCharacterColor() {
-    dispatch({
-      type: 'CHANGE_CHARACTER_COLOR',
-      color: ownProps.characterStartingColor
-    });
-  },
-  setGateBlocked() {
-    dispatch({
-      type: 'SET_GATE_BLOCKED'
-    })
-  },
-  resetGateBlocked() {
-    dispatch({
-      type: 'SET_GATE_UNBLOCKED'
-    });
-  }
+const mapDispatchToProps = ({
+  dispatchMoveCharacter: setCharacterPosition,
+  dispatchChangeCharacterColor:  changeCharacterColor,
+  dispatchSetGateBlocked: setGateBlocked,
+  dispatchLoseGame: loseGame
 });
 
 class Level extends React.Component {
@@ -110,16 +86,18 @@ class Level extends React.Component {
   // NOTE: explicit assignment syntax in order to preserve lexical scope
   handleKeyDown = ({ keyCode }) => {
     const {
-      changeCharacterColor,
       character,
+      dispatchChangeCharacterColor,
+      dispatchLoseGame,
+      dispatchMoveCharacter,
+      dispatchSetGateBlocked,
+      endOnBleedout,
       width,
       height,
       gate,
       keepColor,
       regions,
-      moveCharacter,
       onCompleteLevel,
-      setGateBlocked
     } = this.props;
 
     const maxCoordinates = {
@@ -143,10 +121,10 @@ class Level extends React.Component {
       return onCompleteLevel();
     } else if (isGate) {
       // block movement
-      return setGateBlocked();
+      return dispatchSetGateBlocked(true);
     }
 
-    moveCharacter(newCharacterPosition);
+    dispatchMoveCharacter(newCharacterPosition);
 
     const matchingRegion = regions.find((region) => {
       return isSamePosition(region, newCharacterPosition);
@@ -157,23 +135,31 @@ class Level extends React.Component {
     // The magic numbers 17 and 68 make nice base-16 increments for hex colors.
     if (matchingRegion) {
       newColor = pickUpColor(character.color, matchingRegion.color, 68);
-      changeCharacterColor(newColor);
     } else if (!keepColor) {
       newColor = pickUpColor(character.color, '#000000', 17);
-      changeCharacterColor(newColor);
+    }
+
+    if (newColor) {
+      dispatchChangeCharacterColor(newColor);
+    }
+
+    if (newColor === '#000000' && endOnBleedout) {
+      dispatchLoseGame();
     }
   };
 
   componentDidMount() {
     const {
-      resetGateBlocked,
-      setInitialCharacterColor,
-      setInitialCharacterPosition
+      characterStartingColor,
+      characterStartingPosition,
+      dispatchChangeCharacterColor,
+      dispatchMoveCharacter,
+      dispatchSetGateBlocked,
     } = this.props;
 
-    setInitialCharacterPosition();
-    setInitialCharacterColor();
-    resetGateBlocked();
+    dispatchMoveCharacter(characterStartingPosition);
+    dispatchChangeCharacterColor(characterStartingColor);
+    dispatchSetGateBlocked(true);
 
     window.addEventListener('keydown', this.handleKeyDown);
   }

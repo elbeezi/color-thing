@@ -1,4 +1,5 @@
 import introMonochrome from './introMonochrome';
+import bleedout from './bleedout';
 import fairlyStraightforward from './fairlyStraightforward';
 import aLittlePickMeUp from './aLittlePickMeUp';
 import intro from './01-Introduction';
@@ -8,6 +9,7 @@ import stayFocused from './04-StayFocused';
 import rollTheDice from './05-RollTheDice';
 
 export default [
+  bleedout,
   // fairlyStraightforward, // NOTE: not great, since one misstep and it's unsolvable
   intro,
   // aLittlePickMeUp, // NOTE: currently impossible

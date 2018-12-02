@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import character from './characterReducer';
-import isGateBlocked from './isGateBlockedReducer';
-import victory from './victoryReducer';
+import characterReducer from './character/characterReducer';
+import gameReducer from './game/gameReducer';
+import gateReducer from './gate/gateReducer';
 
 export default combineReducers({
-  character,
-  isGateBlocked,
-  victory
+  character: characterReducer,
+  game: gameReducer,
+  gate: gateReducer,
 });
