@@ -7,7 +7,7 @@ const StyledRegion = styled.div`
   top: ${props => props.tileSize * props.coordinates.y}px;
   width: ${props => props.widthInTiles * props.tileSize}px;
   height: ${props => props.heightInTiles * props.tileSize}px;
-  background-color: ${props => props.color};
+  background-color: ${props => props.regionColor};
 `;
 
 // A colored tile.
@@ -22,7 +22,7 @@ const Region = (props) => {
   } = props;
 
   const styleProps = {
-    color,
+    regionColor: color,
     coordinates  : { x, y },
     widthInTiles : width,
     heightInTiles: height,

@@ -8,7 +8,7 @@ const StyledCharacter = styled.div`
   top             : ${props => props.tileSize * props.coordinates.y}px;
   width           : ${props => props.tileSize * props.widthInTiles}px;
   height          : ${props => props.tileSize * props.heightInTiles}px;
-  background-color: ${props => props.color};
+  background-color: ${props => props.characterColor};
   box-sizing      : border-box;
   border          : 2px solid purple;
 `;
@@ -22,9 +22,8 @@ const Character = (props) => {
     tileSize
   } = props;
 
-  // renaming some props to avoid collision with CSS properties or HTML attrs
   const styleProps = {
-    color,
+    characterColor: color,
     coordinates  : position,
     widthInTiles : width,
     heightInTiles: height,
@@ -37,4 +36,5 @@ const Character = (props) => {
     </StyledCharacter>
   );
 };
+
 export default Character;
