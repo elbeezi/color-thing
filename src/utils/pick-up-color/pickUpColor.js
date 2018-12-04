@@ -7,7 +7,6 @@ import {
   NOTE: `pickupColorValue` doesn't currently care if the source and/or target
     isn't between 0 and 255.
 */
-// Exported for testing purposes.
 export const pickUpColorValue = (source = 0, target = 0, step = 0) => {
   if (source < target) {
     return Math.min(source + step, target);
@@ -27,21 +26,21 @@ export const pickUpColorValue = (source = 0, target = 0, step = 0) => {
 */
 const pickUpColor = (sourceHex = '', targetHex = '', stepAmount = 0) => {
   const {
-    red  : sourceRed,
+    red: sourceRed,
     green: sourceGreen,
-    blue : sourceBlue
+    blue: sourceBlue
   } = parseHexColor(sourceHex);
 
   const {
-    red  : targetRed,
+    red: targetRed,
     green: targetGreen,
-    blue : targetBlue
+    blue: targetBlue
   } = parseHexColor(targetHex);
 
   const outputRgbObject = {
-    red  : pickUpColorValue(sourceRed, targetRed, stepAmount),
+    red: pickUpColorValue(sourceRed, targetRed, stepAmount),
     green: pickUpColorValue(sourceGreen, targetGreen, stepAmount),
-    blue : pickUpColorValue(sourceBlue, targetBlue, stepAmount)
+    blue: pickUpColorValue(sourceBlue, targetBlue, stepAmount)
   };
 
   return hexifyRgbObject(outputRgbObject);
