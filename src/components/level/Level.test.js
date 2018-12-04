@@ -4,8 +4,7 @@ import { Level } from './Level';
 
 const defaultProps = {
   dispatchChangeCharacterColor: jest.fn(),
-  dispatchMoveCharacter: jest.fn(),
-  dispatchSetGateBlocked: jest.fn()
+  dispatchMoveCharacter: jest.fn()
 };
 
 describe('Level', () => {

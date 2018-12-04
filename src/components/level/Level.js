@@ -9,15 +9,15 @@ import {
 } from '../../utils/get-adjacent-character-positions/getAdjacentCharacterPositions';
 import pickUpColor from '../../utils/pick-up-color/pickUpColor';
 import {
+  getCharacter
+} from '../../redux/character/characterReducer';
+import {
   changeCharacterColor,
   setCharacterPosition,
 } from '../../redux/character/characterActions';
 import {
   loseGame
 } from '../../redux/game/gameActions';
-import {
-  setGateBlocked
-} from '../../redux/gate/gateActions';
 
 const isSamePosition = (a, b) => a.x === b.x && a.y === b.y;
 
@@ -39,22 +39,18 @@ const StyledLevel = styled.div`
   background: #000000;
 `;
 
-const GateBlockedText = () => (
-  <TextBlock>{'Match the gate\'s color to pass.'}</TextBlock>
+const enhance = connect(
+  state => ({
+    character: getCharacter(state)
+  }),
+  {
+    dispatchMoveCharacter: setCharacterPosition,
+    dispatchChangeCharacterColor: changeCharacterColor,
+    dispatchLoseGame: loseGame
+  }
 );
 
-const mapStateToProps = ({ character, gate }) => ({
-  character,
-  isGateBlocked: gate.isBlocked,
-});
-
-const mapDispatchToProps = ({
-  dispatchMoveCharacter: setCharacterPosition,
-  dispatchChangeCharacterColor: changeCharacterColor,
-  dispatchSetGateBlocked: setGateBlocked,
-  dispatchLoseGame: loseGame,
-});
-
+// NOTE: This is a class because it needs lifecycle hooks and event listeners.
 export class Level extends React.Component {
 
   /*
@@ -90,7 +86,6 @@ export class Level extends React.Component {
       dispatchChangeCharacterColor,
       dispatchLoseGame,
       dispatchMoveCharacter,
-      dispatchSetGateBlocked,
       endOnBleedout,
       width,
       height,
@@ -121,7 +116,7 @@ export class Level extends React.Component {
       return onCompleteLevel();
     } else if (isGate) {
       // block movement
-      return dispatchSetGateBlocked(true);
+      return alert('Match the gate\'s color to pass.');
     }
 
     dispatchMoveCharacter(newCharacterPosition);
@@ -154,12 +149,10 @@ export class Level extends React.Component {
       characterStartingPosition,
       dispatchChangeCharacterColor,
       dispatchMoveCharacter,
-      dispatchSetGateBlocked,
     } = this.props;
 
     dispatchMoveCharacter(characterStartingPosition);
     dispatchChangeCharacterColor(characterStartingColor);
-    dispatchSetGateBlocked(true);
 
     window.addEventListener('keydown', this.handleKeyDown);
   }
@@ -171,7 +164,6 @@ export class Level extends React.Component {
   render() {
     const {
       character,
-      isGateBlocked,
       width,
       height,
       gate,
@@ -209,15 +201,11 @@ export class Level extends React.Component {
           <Gate {...gateProps} />
           <Character {...characterProps} />
         </StyledLevel>
-        {isGateBlocked && <GateBlockedText />}
+        <TextBlock>{'Match the gate\'s color to pass.'}</TextBlock>
       </LevelWrapper>
     );
   }
 }
 
-const EnhancedLevel = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Level);
-
+const EnhancedLevel = enhance(Level);
 export default EnhancedLevel;
