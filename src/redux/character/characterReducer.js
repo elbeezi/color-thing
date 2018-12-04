@@ -1,3 +1,5 @@
+import CHARACTER_ACTION_TYPES from './characterActionTypes';
+
 const initialState = {
   width: 1,
   height: 1,
@@ -7,22 +9,25 @@ const initialState = {
 };
 
 const characterReducer = (state = initialState, action) => {
+
   switch (action.type) {
-    case 'SET_CHARACTER_POSITION':
+    case CHARACTER_ACTION_TYPES.SET_CHARACTER_POSITION:
       return {
         ...state,
         position: action.payload
       };
-    case 'CHANGE_CHARACTER_COLOR':
+
+    case CHARACTER_ACTION_TYPES.CHANGE_CHARACTER_COLOR:
       return {
         ...state,
         color: action.payload
       };
+
     default:
       return state;
   }
 };
 
-export const getCharacter = (state) => state.character;
+export const getCharacter = state => state.character;
 
 export default characterReducer;
