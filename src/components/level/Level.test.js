@@ -1,10 +1,16 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Level from './Level';
+import { Level } from './Level';
+
+const defaultProps = {
+  dispatchChangeCharacterColor: jest.fn(),
+  dispatchMoveCharacter: jest.fn(),
+  dispatchSetGateBlocked: jest.fn()
+};
 
 describe('Level', () => {
   it('renders', () => {
-    const component = shallow(<Level/>);
+    const component = shallow(<Level {...defaultProps} />);
     expect(component.find('.Level')).toHaveLength(1);
   });
 });

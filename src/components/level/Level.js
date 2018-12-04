@@ -50,12 +50,12 @@ const mapStateToProps = ({ character, gate }) => ({
 
 const mapDispatchToProps = ({
   dispatchMoveCharacter: setCharacterPosition,
-  dispatchChangeCharacterColor:  changeCharacterColor,
+  dispatchChangeCharacterColor: changeCharacterColor,
   dispatchSetGateBlocked: setGateBlocked,
   dispatchLoseGame: loseGame,
 });
 
-class Level extends React.Component {
+export class Level extends React.Component {
 
   /*
     NOTE: Should definitely clean up this logic:
@@ -196,7 +196,7 @@ class Level extends React.Component {
     };
 
     const styleProps = {
-      widthInTiles : width,
+      widthInTiles: width,
       heightInTiles: height,
       tileSize
     };
@@ -209,7 +209,7 @@ class Level extends React.Component {
           <Gate {...gateProps} />
           <Character {...characterProps} />
         </StyledLevel>
-        {isGateBlocked && <GateBlockedText/>}
+        {isGateBlocked && <GateBlockedText />}
       </LevelWrapper>
     );
   }
