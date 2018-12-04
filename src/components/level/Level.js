@@ -9,6 +9,9 @@ import {
 } from '../../utils/get-adjacent-character-positions/getAdjacentCharacterPositions';
 import pickUpColor from '../../utils/pick-up-color/pickUpColor';
 import {
+  getCharacter
+} from '../../redux/character/characterReducer';
+import {
   changeCharacterColor,
   setCharacterPosition,
 } from '../../redux/character/characterActions';
@@ -36,8 +39,8 @@ const StyledLevel = styled.div`
   background: #000000;
 `;
 
-const mapStateToProps = ({ character }) => ({
-  character,
+const mapStateToProps = (state) => ({
+  character: getCharacter(state),
 });
 
 const mapDispatchToProps = ({
@@ -46,6 +49,7 @@ const mapDispatchToProps = ({
   dispatchLoseGame: loseGame
 });
 
+// NOTE: This is a class because it needs lifecycle hooks and event listeners.
 export class Level extends React.Component {
 
   /*

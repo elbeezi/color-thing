@@ -23,4 +23,6 @@ const characterReducer = (state = initialState, action) => {
   }
 };
 
+export const getCharacter = (state) => state.character;
+
 export default characterReducer;
