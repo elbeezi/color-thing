@@ -71,14 +71,13 @@ const CheaterText = () => (
   <BigMessage>Nice try, pal.</BigMessage>
 );
 
-const GamePure = (props) => {
+export const GamePure = (props) => {
   const {
     gameOverState,
     levelIndex,
     levelPassed,
     onCompleteLevel,
     restartGame,
-    showModal,
     nextLevel,
   } = props;
 
@@ -96,15 +95,15 @@ const GamePure = (props) => {
 
   const VictoryUI = () => (
     <StyledVictoryUI>
-      <VictoryText/>
-      <RestartGameButton/>
+      <VictoryText />
+      <RestartGameButton />
     </StyledVictoryUI>
   );
 
   const FailureUI = () => (
     <StyledFailureUI>
-      <FailureText/>
-      <RestartGameButton/>
+      <FailureText />
+      <RestartGameButton />
     </StyledFailureUI>
   );
 
@@ -114,22 +113,27 @@ const GamePure = (props) => {
 
   const GameOverUI = () => (
     <FlexWrapper>
-      {victory ? <VictoryUI/> : <FailureUI/>}
+      {victory ? <VictoryUI /> : <FailureUI />}
     </FlexWrapper>
   );
 
   const LevelWrapper = () => (
     <div>
-      <RestartGameButton/>
-      {levelPassed && <NextLevelModal show={levelPassed} nextLevel={nextLevel(levelIndex)}></NextLevelModal>}
+      <RestartGameButton />
       <FlexWrapper>
-        {isValidLevel ? <ActiveLevel/> : <CheaterText/>}
+        {isValidLevel ? <ActiveLevel /> : <CheaterText />}
       </FlexWrapper>
     </div>
   );
 
   return (
-    isGameOver ? <GameOverUI/> : <LevelWrapper/>
+    <div className='Game'>
+      {
+        levelPassed
+          ? <NextLevelModal nextLevel={nextLevel(levelIndex)} />
+          : isGameOver ? <GameOverUI /> : <LevelWrapper />
+      }
+    </div>
   );
 };
 
