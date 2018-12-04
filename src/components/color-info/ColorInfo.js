@@ -11,7 +11,7 @@ const ColorInfo = ({ color }) => {
   const rgbValues = parseHexColor(color);
 
   return (
-    <div>
+    <div className='ColorInfo'>
       <ColorText>Red: {rgbValues.red}</ColorText>
       <ColorText>Green: {rgbValues.green}</ColorText>
       <ColorText>Blue: {rgbValues.blue}</ColorText>
