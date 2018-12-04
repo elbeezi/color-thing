@@ -52,7 +52,7 @@ const mapDispatchToProps = ({
   dispatchMoveCharacter: setCharacterPosition,
   dispatchChangeCharacterColor:  changeCharacterColor,
   dispatchSetGateBlocked: setGateBlocked,
-  dispatchLoseGame: loseGame
+  dispatchLoseGame: loseGame,
 });
 
 class Level extends React.Component {
