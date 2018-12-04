@@ -15,9 +15,6 @@ import {
 import {
   loseGame
 } from '../../redux/game/gameActions';
-import {
-  setGateBlocked
-} from '../../redux/gate/gateActions';
 
 const isSamePosition = (a, b) => a.x === b.x && a.y === b.y;
 
@@ -39,20 +36,14 @@ const StyledLevel = styled.div`
   background: #000000;
 `;
 
-const GateBlockedText = () => (
-  <TextBlock>{'Match the gate\'s color to pass.'}</TextBlock>
-);
-
-const mapStateToProps = ({ character, gate }) => ({
+const mapStateToProps = ({ character }) => ({
   character,
-  isGateBlocked: gate.isBlocked,
 });
 
 const mapDispatchToProps = ({
   dispatchMoveCharacter: setCharacterPosition,
   dispatchChangeCharacterColor: changeCharacterColor,
-  dispatchSetGateBlocked: setGateBlocked,
-  dispatchLoseGame: loseGame,
+  dispatchLoseGame: loseGame
 });
 
 export class Level extends React.Component {
@@ -90,7 +81,6 @@ export class Level extends React.Component {
       dispatchChangeCharacterColor,
       dispatchLoseGame,
       dispatchMoveCharacter,
-      dispatchSetGateBlocked,
       endOnBleedout,
       width,
       height,
@@ -119,9 +109,6 @@ export class Level extends React.Component {
     if (isGate && gate.color === character.color) {
       // win the level, change the level
       return onCompleteLevel();
-    } else if (isGate) {
-      // block movement
-      return dispatchSetGateBlocked(true);
     }
 
     dispatchMoveCharacter(newCharacterPosition);
@@ -154,12 +141,10 @@ export class Level extends React.Component {
       characterStartingPosition,
       dispatchChangeCharacterColor,
       dispatchMoveCharacter,
-      dispatchSetGateBlocked,
     } = this.props;
 
     dispatchMoveCharacter(characterStartingPosition);
     dispatchChangeCharacterColor(characterStartingColor);
-    dispatchSetGateBlocked(true);
 
     window.addEventListener('keydown', this.handleKeyDown);
   }
@@ -171,7 +156,6 @@ export class Level extends React.Component {
   render() {
     const {
       character,
-      isGateBlocked,
       width,
       height,
       gate,
@@ -209,7 +193,7 @@ export class Level extends React.Component {
           <Gate {...gateProps} />
           <Character {...characterProps} />
         </StyledLevel>
-        {isGateBlocked && <GateBlockedText />}
+        <TextBlock>{'Match the gate\'s color to pass.'}</TextBlock>
       </LevelWrapper>
     );
   }
