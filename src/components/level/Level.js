@@ -44,9 +44,9 @@ const enhance = connect(
     character: getCharacter(state)
   }),
   {
-  dispatchMoveCharacter: setCharacterPosition,
-    dispatchChangeCharacterColor:  changeCharacterColor,
-  dispatchLoseGame: loseGame
+    dispatchMoveCharacter: setCharacterPosition,
+    dispatchChangeCharacterColor: changeCharacterColor,
+    dispatchLoseGame: loseGame
   }
 );
 
@@ -114,6 +114,9 @@ export class Level extends React.Component {
     if (isGate && gate.color === character.color) {
       // win the level, change the level
       return onCompleteLevel();
+    } else if (isGate) {
+      // block movement
+      return alert('Match the gate\'s color to pass.');
     }
 
     dispatchMoveCharacter(newCharacterPosition);
