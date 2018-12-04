@@ -39,15 +39,16 @@ const StyledLevel = styled.div`
   background: #000000;
 `;
 
-const mapStateToProps = (state) => ({
-  character: getCharacter(state),
-});
-
-const mapDispatchToProps = ({
+const enhance = connect(
+  state => ({
+    character: getCharacter(state)
+  }),
+  {
   dispatchMoveCharacter: setCharacterPosition,
-  dispatchChangeCharacterColor: changeCharacterColor,
+    dispatchChangeCharacterColor:  changeCharacterColor,
   dispatchLoseGame: loseGame
-});
+  }
+);
 
 // NOTE: This is a class because it needs lifecycle hooks and event listeners.
 export class Level extends React.Component {
@@ -203,9 +204,5 @@ export class Level extends React.Component {
   }
 }
 
-const EnhancedLevel = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Level);
-
+const EnhancedLevel = enhance(Level);
 export default EnhancedLevel;
