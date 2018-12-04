@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Level from '../level/Level';
 import levelConfigs from '../../level-configs/levelConfigs';
-import NextLevelModal from '../next-level/NextLevelModal';
+import NextLevelModal from '../next-level-modal/NextLevelModal';
 import {
   winGame,
   restartGame

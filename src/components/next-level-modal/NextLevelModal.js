@@ -1,25 +1,25 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 const TextBlock = styled.div`
-  position:fixed;
+  position: fixed;
   color: white;
   width: 80%;
   height: auto;
-  top:50%;
-  left:50%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%,-50%);
   background: #000000;
   text-align: center;
 `;
 
-const NextLevelModal = ({ nextLevel, show, children } ) => {
-  const showHideClassName = show ? 'modal display-block' : 'modal display-none';
+const NextLevelModal = ({ nextLevel, show, children }) => {
+  const displayType = show ? 'display-block' : 'display-none';
+  const className = `NextLevelModal NextLevelModal--${displayType}`;
 
   return (
-    <div className={showHideClassName}>
-      <section className="modal-main">
+    <div className={className}>
+      <section className='NextLevelModal__modal-main'>
         <TextBlock>
           {children}
           <button onClick={nextLevel}>Next Level</button>
@@ -27,7 +27,7 @@ const NextLevelModal = ({ nextLevel, show, children } ) => {
       </section>
     </div>
   );
-}
+};
 
 
 export default NextLevelModal;
