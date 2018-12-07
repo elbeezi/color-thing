@@ -1,5 +1,15 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+import {
+  startLevel
+} from '../../redux/level-progress/levelProgressActions';
+import {
+  winGame
+} from '../../redux/game-progress/gameProgressActions';
+import levelConfigs from '../../level-configs/levelConfigs';
 
 const TextBlock = styled.div`
   position: fixed;
@@ -13,21 +23,44 @@ const TextBlock = styled.div`
   text-align: center;
 `;
 
-const NextLevelModal = ({ nextLevel, show, children }) => {
-  const displayType = show ? 'display-block' : 'display-none';
-  const className = `NextLevelModal NextLevelModal--${displayType}`;
+const enhance = compose(
+  withRouter,
+  connect(
+    null,
+    (dispatch, { history }) => ({
+      startNextLevel: (currentLevel) => () => {
+        const nextLevel = currentLevel + 1;
+        const isFinalLevel = nextLevel % levelConfigs.length === 0;
+        if (isFinalLevel) {
+          dispatch(winGame());
+        } else {
+          dispatch(startLevel());
+          history.push(`/${nextLevel}`);
+        }
+
+      }
+    })
+  )
+);
+
+const NextLevelModalPure = (props) => {
+  const {
+    match,
+    startNextLevel
+  } = props;
+
+  const currentLevel = parseInt(match.params.level, 10) || 0;
 
   return (
-    <div className={className}>
+    <div className='NextLevelModal'>
       <section className='NextLevelModal__modal-main'>
         <TextBlock>
-          {children}
-          <button onClick={nextLevel}>Next Level</button>
+          <button onClick={startNextLevel(currentLevel)}>Next Level</button>
         </TextBlock>
       </section>
     </div>
   );
 };
 
-
+const NextLevelModal = enhance(NextLevelModalPure);
 export default NextLevelModal;

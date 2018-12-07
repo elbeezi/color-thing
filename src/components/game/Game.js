@@ -5,51 +5,41 @@ import Level from '../level/Level';
 import levelConfigs from '../../level-configs/levelConfigs';
 import NextLevelModal from '../next-level-modal/NextLevelModal';
 import {
-  winGame,
   restartGame
-} from '../../redux/game/gameActions';
+} from '../../redux/game-progress/gameProgressActions';
 import {
-  showModal,
-  hideModal
-} from '../../redux/modal/modalActions';
+  getIsGameOver,
+  getIsGameWon
+} from '../../redux/game-progress/gameProgressReducer';
+import {
+  getIsLevelComplete
+} from '../../redux/level-progress/levelProgressReducer';
 
-const mapStateToProps = (state, ownProps) => ({
-  levelIndex: parseInt(ownProps.match.params.level, 10) || 0,
-  gameOverState: state.game.gameOverState,
-  levelPassed: state.modal.levelPassed
-});
-
-const mapDispatchToProps = (dispatch, { history }) => ({
-  onCompleteLevel: (currentLevel) => () => {
-    const isFinalLevel = currentLevel === levelConfigs.length - 1;
-    const incrementLevel = () => dispatch(showModal(true));
-    isFinalLevel ? dispatch(winGame()) : incrementLevel();
-  },
-  restartGame() {
-    dispatch(restartGame());
-    history.push('/');
-  },
-  nextLevel: (currentLevel) => () => {
-    const isFinalLevel = currentLevel === levelConfigs.length - 1;
-    dispatch(hideModal(false));
-    history.push(`/${parseInt(currentLevel, 10) + 1}`);
-  }
-});
+const enhance = connect(
+  (state, ownProps) => ({
+    levelIndex: parseInt(ownProps.match.params.level, 10) || 0,
+    isLevelComplete: getIsLevelComplete(state),
+    isGameOver: getIsGameOver(state),
+    isGameWon: getIsGameWon(state),
+  }),
+  (dispatch, { history }) => ({
+    restartGame() {
+      dispatch(restartGame());
+      history.push('/');
+    }
+  })
+);
 
 const StyledBigMessage = styled.h1`
   color: #ffffff;
 `;
 
-const StyledVictoryUI = styled.div`
-  text-align: center;
-`;
-
-const StyledFailureUI = styled.div`
+const StyledGameOverUI = styled.div`
   text-align: center;
 `;
 
 const FlexWrapper = styled.div`
-  display        : flex;
+  display: flex;
   justify-content: center;
 `;
 
@@ -73,12 +63,11 @@ const CheaterText = () => (
 
 export const GamePure = (props) => {
   const {
-    gameOverState,
+    isGameOver,
+    isGameWon,
+    isLevelComplete,
     levelIndex,
-    levelPassed,
-    onCompleteLevel,
     restartGame,
-    nextLevel,
   } = props;
 
   const isValidLevel = levelIndex >= 0 && levelIndex < levelConfigs.length;
@@ -89,57 +78,33 @@ export const GamePure = (props) => {
     <button onClick={restartGame}>Restart Game</button>
   );
 
-  const ActiveLevel = () => (
-    <Level {...activeLevelConfig} onCompleteLevel={onCompleteLevel(levelIndex)} />
-  );
-
-  const VictoryUI = () => (
-    <StyledVictoryUI>
-      <VictoryText />
-      <RestartGameButton />
-    </StyledVictoryUI>
-  );
-
-  const FailureUI = () => (
-    <StyledFailureUI>
-      <FailureText />
-      <RestartGameButton />
-    </StyledFailureUI>
-  );
-
-  const victory = gameOverState === 'victory';
-
-  const isGameOver = !!gameOverState;
-
   const GameOverUI = () => (
-    <FlexWrapper>
-      {victory ? <VictoryUI /> : <FailureUI />}
-    </FlexWrapper>
+    <StyledGameOverUI>
+      {isGameWon ? <VictoryText /> : <FailureText />}
+      <RestartGameButton />
+    </StyledGameOverUI>
   );
 
   const LevelWrapper = () => (
     <div>
       <RestartGameButton />
       <FlexWrapper>
-        {isValidLevel ? <ActiveLevel /> : <CheaterText />}
+        {isValidLevel ? <Level {...activeLevelConfig} /> : <CheaterText />}
       </FlexWrapper>
     </div>
   );
 
+  const LevelOrModalWrapper = () => (
+    isLevelComplete ? <NextLevelModal /> : <LevelWrapper />
+  );
+
   return (
     <div className='Game'>
-      {
-        levelPassed
-          ? <NextLevelModal nextLevel={nextLevel(levelIndex)} />
-          : isGameOver ? <GameOverUI /> : <LevelWrapper />
-      }
+      {isGameOver ? <GameOverUI /> : <LevelOrModalWrapper />}
     </div>
   );
 };
 
-const Game = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GamePure);
+const Game = enhance(GamePure);
 
 export default Game;
