@@ -1,12 +1,8 @@
-const changeCharacterColor = (color) => ({
-  type: 'CHANGE_CHARACTER_COLOR',
-  payload: color
-});
+import { createAction } from 'redux-actions';
+import CHARACTER_ACTION_TYPES from './characterActionTypes';
 
-const setCharacterPosition = (position) => ({
-  type: 'SET_CHARACTER_POSITION',
-  payload: position
-});
+const changeCharacterColor = createAction(CHARACTER_ACTION_TYPES.CHANGE_CHARACTER_COLOR);
+const setCharacterPosition = createAction(CHARACTER_ACTION_TYPES.SET_CHARACTER_POSITION);
 
 export {
   setCharacterPosition,

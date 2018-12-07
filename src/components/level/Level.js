@@ -4,12 +4,14 @@ import styled from 'styled-components';
 import Character from '../character/Character';
 import Gate from '../gate/Gate';
 import RegionList from '../region-list/RegionList';
-import {
-  getAdjacentCharacterPosition
-} from '../../utils/get-adjacent-character-positions/getAdjacentCharacterPositions';
 import pickUpColor from '../../utils/pick-up-color/pickUpColor';
 import {
-  getCharacter
+  characterPositionReducer,
+  getCharacterColor,
+  getCharacterPosition,
+  getCharacterVelocity,
+  getCharacterWidth,
+  getCharacterHeight
 } from '../../redux/character/characterReducer';
 import {
   changeCharacterColor,
@@ -17,7 +19,13 @@ import {
 } from '../../redux/character/characterActions';
 import {
   loseGame
-} from '../../redux/game/gameActions';
+} from '../../redux/game-progress/gameProgressActions';
+import {
+  completeLevel
+} from '../../redux/level-progress/levelProgressActions';
+import {
+  getActionTypeFromKeyboardInput
+} from '../../utils/input-event-helpers/inputEventHelpers';
 
 const isSamePosition = (a, b) => a.x === b.x && a.y === b.y;
 
@@ -41,12 +49,17 @@ const StyledLevel = styled.div`
 
 const enhance = connect(
   state => ({
-    character: getCharacter(state)
+    characterColor: getCharacterColor(state),
+    characterPosition: getCharacterPosition(state),
+    characterVelocity: getCharacterVelocity(state),
+    characterWidth: getCharacterWidth(state),
+    characterHeight: getCharacterHeight(state)
   }),
   {
     dispatchMoveCharacter: setCharacterPosition,
     dispatchChangeCharacterColor: changeCharacterColor,
-    dispatchLoseGame: loseGame
+    dispatchCompleteLevel: completeLevel,
+    dispatchLoseGame: loseGame,
   }
 );
 
@@ -80,10 +93,15 @@ export class Level extends React.Component {
     END: nothing happens
   */
   // NOTE: explicit assignment syntax in order to preserve lexical scope
-  handleKeyDown = ({ keyCode }) => {
+  handleKeyDown = ({ key }) => {
     const {
-      character,
+      characterColor,
+      characterPosition,
+      characterVelocity,
+      characterWidth,
+      characterHeight,
       dispatchChangeCharacterColor,
+      dispatchCompleteLevel,
       dispatchLoseGame,
       dispatchMoveCharacter,
       endOnBleedout,
@@ -92,17 +110,38 @@ export class Level extends React.Component {
       gate,
       keepColor,
       regions,
-      onCompleteLevel,
     } = this.props;
 
-    const maxCoordinates = {
-      x: width - character.width,
-      y: height - character.height
+    const action = {
+      type: getActionTypeFromKeyboardInput(key),
+      payload: {
+        gatePosition: {
+          x: gate.x,
+          y: gate.y
+        },
+        velocity: characterVelocity,
+        max: {
+          x: width - characterWidth,
+          y: height - characterHeight
+        },
+        min: {
+          x: 0,
+          y: 0
+        }
+      }
     };
 
-    const newCharacterPosition = getAdjacentCharacterPosition(character, maxCoordinates, keyCode);
+    /*
+      FIXME: We're misusing a reducer here.
+        Problem is, in order to move the character properly,
+        we need to know some information about the gate,
+        as well as the level's max and min coordinates.
+        A reducer to handle the complete character movement logic
+        would need all that context.
+    */
+    const newCharacterPosition = characterPositionReducer(characterPosition, action);
 
-    const hasNotMoved = isSamePosition(newCharacterPosition, character.position);
+    const hasNotMoved = isSamePosition(newCharacterPosition, characterPosition);
 
     if (hasNotMoved) {
       // We don't want to decay color if we haven't moved.
@@ -111,9 +150,9 @@ export class Level extends React.Component {
 
     const isGate = isSamePosition(gate, newCharacterPosition);
 
-    if (isGate && gate.color === character.color) {
+    if (isGate && gate.color === characterColor) {
       // win the level, change the level
-      return onCompleteLevel();
+      return dispatchCompleteLevel();
     } else if (isGate) {
       // block movement
       return alert('Match the gate\'s color to pass.');
@@ -129,14 +168,14 @@ export class Level extends React.Component {
 
     // The magic numbers 17 and 68 make nice base-16 increments for hex colors.
     if (matchingRegion) {
-      newColor = pickUpColor(character.color, matchingRegion.color, 68);
+      newColor = pickUpColor(characterColor, matchingRegion.color, 68);
     } else if (!keepColor) {
-      newColor = pickUpColor(character.color, '#000000', 17);
+      newColor = pickUpColor(characterColor, '#000000', 17);
+    } else {
+      newColor = characterColor;
     }
 
-    if (newColor) {
-      dispatchChangeCharacterColor(newColor);
-    }
+    dispatchChangeCharacterColor(newColor);
 
     if (newColor === '#000000' && endOnBleedout) {
       dispatchLoseGame();
@@ -163,7 +202,6 @@ export class Level extends React.Component {
 
   render() {
     const {
-      character,
       width,
       height,
       gate,
@@ -182,11 +220,6 @@ export class Level extends React.Component {
       tileSize
     };
 
-    const characterProps = {
-      ...character,
-      tileSize
-    };
-
     const styleProps = {
       widthInTiles: width,
       heightInTiles: height,
@@ -199,7 +232,7 @@ export class Level extends React.Component {
         <StyledLevel className='Level' {...styleProps}>
           <RegionList {...regionListProps} />
           <Gate {...gateProps} />
-          <Character {...characterProps} />
+          <Character tileSize={tileSize} />
         </StyledLevel>
         <TextBlock>{'Match the gate\'s color to pass.'}</TextBlock>
       </LevelWrapper>

@@ -1,6 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import ColorInfo from '../color-info/ColorInfo';
+import {
+  getCharacterColor,
+  getCharacterPosition,
+  getCharacterWidth,
+  getCharacterHeight
+} from '../../redux/character/characterReducer';
 
 const StyledCharacter = styled.div`
   position        : absolute;
@@ -13,28 +20,38 @@ const StyledCharacter = styled.div`
   border          : 2px solid purple;
 `;
 
-const Character = (props) => {
+const enhance = connect(
+  (state) => ({
+    characterColor: getCharacterColor(state),
+    coordinates: getCharacterPosition(state),
+    widthInTiles: getCharacterWidth(state),
+    heightInTiles: getCharacterHeight(state)
+  })
+);
+
+export const CharacterPure = (props) => {
   const {
-    color,
-    position,
-    width,
-    height,
+    characterColor,
+    coordinates,
+    widthInTiles,
+    heightInTiles,
     tileSize
   } = props;
 
   const styleProps = {
-    characterColor: color,
-    coordinates  : position,
-    widthInTiles : width,
-    heightInTiles: height,
+    characterColor,
+    coordinates,
+    widthInTiles,
+    heightInTiles,
     tileSize
   };
 
   return (
     <StyledCharacter className='Character' {...styleProps}>
-      <ColorInfo color={color} />
+      <ColorInfo color={characterColor} />
     </StyledCharacter>
   );
 };
 
+const Character = enhance(CharacterPure);
 export default Character;

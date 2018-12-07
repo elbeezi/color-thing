@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Character from './Character';
+import { CharacterPure } from './Character';
 
-describe('Character', () => {
+describe('CharacterPure', () => {
   it('renders', () => {
-    const component = shallow(<Character/>);
+    const component = shallow(<CharacterPure />);
     expect(component.find('.Character')).toHaveLength(1);
   });
 });
