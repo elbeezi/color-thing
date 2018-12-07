@@ -18,6 +18,9 @@ const levelConfig = {
     y: 0
   },
 
+  // Optional flag for preventing color decay. Defaults to false.
+  // keepColor: false,
+
   characterStartingColor: '#000000',
 
   /*
