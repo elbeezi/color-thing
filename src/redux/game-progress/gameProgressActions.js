@@ -1,12 +1,14 @@
 import { createAction } from 'redux-actions';
 import GAME_PROGRESS_ACTION_TYPES from './gameProgressActionTypes';
 
-const winGame = createAction(GAME_PROGRESS_ACTION_TYPES.WIN_GAME);
 const loseGame = createAction(GAME_PROGRESS_ACTION_TYPES.LOSE_GAME);
 const restartGame = createAction(GAME_PROGRESS_ACTION_TYPES.RESTART_GAME);
+const completeLevel = createAction(GAME_PROGRESS_ACTION_TYPES.COMPLETE_LEVEL);
+const startNextLevel = createAction(GAME_PROGRESS_ACTION_TYPES.START_NEXT_LEVEL);
 
 export {
-  winGame,
   loseGame,
-  restartGame
+  restartGame,
+  completeLevel,
+  startNextLevel
 };
