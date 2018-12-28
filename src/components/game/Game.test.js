@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { GamePure } from './Game';
+import { Game } from './Game';
 
-describe('GamePure', () => {
+describe('Game', () => {
   it('renders', () => {
-    const component = shallow(<GamePure />);
+    const component = shallow(<Game />);
     expect(component.find('.Game')).toHaveLength(1);
   });
 });
