@@ -44,7 +44,7 @@ module.exports = (env, argv) => {
     },
     devtool: isDevelopment && 'inline-source-map',
     devServer: {
-      contentBase: isDevelopment && './dist',
+      contentBase: './dist',
       historyApiFallback: true
     }
   };
