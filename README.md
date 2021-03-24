@@ -1,6 +1,4 @@
 ## Install
-### Download prerequisites
-- [Yarn](https://yarnpkg.com/en/docs/install)
 
 ### Download source & install dependencies
 1. Clone repository
@@ -8,15 +6,16 @@
 3. `yarn`
 
 ## Play & Contribute
-1. `yarn start --open`
-* (or `yarn start` and open `localhost:8080` in a browser)
+1. `npm start -- --open`
+* (or `npm start` and open `localhost:8080` in a browser)
 
 ## Build & Play
-1. `yarn build`
-2. Open `/dist/index.html` in a browser
+1. `npm run build`
+2. Open `<root>/dist/index.html` in a browser
 
 ## Test
-1. `yarn test`
+1. `npm test` (interactive)
+* (or `npm test:ci` for a single run)
 
 ## Creating Levels
 1. Create a new file in `/src/level-configs/` (or copy an existing level)
