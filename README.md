@@ -3,7 +3,7 @@
 ### Download source & install dependencies
 1. Clone repository
 2. `cd` into source directory
-3. `yarn`
+3. `npm install`
 
 ## Play & Contribute
 1. `npm start -- --open`
